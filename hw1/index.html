@@ -40,7 +40,7 @@
 			<hr>
 				<p><u>Implementation</u></p>
 				<p>
-				    To rasterize triangles, we first need to determine the boundary box to account for edges and find the boundary of where a point would be included and where it won't. The bounding box is defined as the rectangle from \((x_{\text{min}}, y_{\text{min}})\) to \((x_{\text{max}}, y_{\text{max}})\). \(x_{\text{min}}\) is determined as the minimum <code>x</code>x coordinate of the vertices passed in as input by using the <code>min</code> and <code>floor</code> functions. \(x_{\text{max}}\) is similarly calculated but with the <code>max</code> function instead. The same process was done for the <code>y</code> coordinate. These values represent the smallest and largest <code>x</code> and <code>y</code> values out of the points given as input. Therefore, our algorithm only looks at points/pixels within the bounding box of the triangle.
+				    To rasterize triangles, we first need to determine the boundary box to account for edges and find the boundary of where a point would be included and where it won't. The bounding box is defined as the rectangle from \((x_{\text{min}}, y_{\text{min}})\) to \((x_{\text{max}}, y_{\text{max}})\). \(x_{\text{min}}\) is determined as the minimum <code>x</code> coordinate of the vertices passed in as input by using the <code>min</code> and <code>floor</code> functions. \(x_{\text{max}}\) is similarly calculated but with the <code>max</code> function instead. The same process was done for the <code>y</code> coordinate. These values represent the smallest and largest <code>x</code> and <code>y</code> values out of the points given as input. Therefore, our algorithm only looks at points/pixels within the bounding box of the triangle.
 				</p>
 				<p>
 				    Next, we implemented the line test method taught in the lecture to determine whether a point laid inside or outside of the triangle. To do this, we initially created a lambda function that determined whether the point is to the left, right, or on the edge/line \(AB\). If the point is on the same side of each triangle edge, this meant that the point is inside the triangle. Later on the project, we created a separate helper function defined as <code>point_inside()</code> that did the line test calculation for each line of the triangle outside of <code>rasterize_triangle()</code> for more convenient usage. Our implementation ensures that the line test would work regardless of the winding order of the vertices.
@@ -56,6 +56,30 @@
 			<hr>
 
 			<h3 align="middle">Task 2: Antialiasing by Supersampling</h3>
+			<hr>
+				<p><u>Implementation</u></p>
+				<p>
+					In traditional rendering and in Task 1, we sampled the point in the middle of the pixel by adding <code>0.5</code> to the <code>x</code> and <code>y</code> axis to determine the pixel's color. This can lead to aliasing issues especially along edges and curves, creating jaggies which is displayed with our results from rasterization done in Task 1. With supersampling, multiple sample points are taken within each pixel instead of just sampling one point per pixel. We divide each pixel into 4, 9, and 16 squares — essentially 4, 9, and 16 points inside each pixel. Since each pixel is divided into subsamples, each is essentially treated as their own points/"pixels" and were thus subject to the same sampling method of whether the point was inside or outside the triangle.
+				</p>
+
+				<p>
+					However, we aren't able to directly apply this to the screen because we have fewer screen pixels than our data structure. We averaged the color of the sampled points to create a new color for each pixel. The color was based on the "area" of the single sample that was covered by the triangle. To store the supersamples, we used the existing data structure/variable <code>sample_buffer</code> which is essentially a <code>std::vector<Color></code> that is the internal color sample buffer containing all samples. Notably, the number of elements in the <code>buffer = width * height * sample_rate</code>. 
+				</p>
+
+				<p>
+					Supersampling is useful because creates better detail in our triangles by "smoothening out" the edges by generating intermittent colors between high-frequency pixels. Instead of only 1 sample per pixel, the averaging process helps reduce aliasing artifacts and produces smoother transitions between colors, resulting in a better visual representation of the triangle. 
+				</p>
+
+				<p>
+					For the rasterization pipeline, we made a few modifications to the rasterization pipeline in the process. Specifically, we utilized the <code>sample_rate</code> variable previously defined to specify the number of samples per pixel. In the <code>resolve_to_framebuffer</code> function, instead of directly copying colors from the sample buffer to the framebuffer, colors from all sample points within each pixel are averaged to produce the pixel's final color. We also updated <code>set_sample_rate</code>, <code>set_framebuffer_target</code> and <code>resolve_to_framebuffer</code> to account for the changes in <code>sample_rate</code>. An important note is that despite supersampling enabling "smoother" and more detailed images, it increases computational cost since more samples need to be processed for each pixel.
+				</p>
+
+				<p>Here is the screenshot of basic/test4.svg with the default viewing parameters and sample rate of 1 per pixel:</p>
+				<div align="middle">
+					<img src="images/basic:test4.svg_rate1.png" align="middle"/>
+				</div>
+			
+			<hr>
 
 			<h3 align="middle">Task 3: Transforms</h3>
 
