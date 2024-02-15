@@ -59,7 +59,7 @@
 			<hr>
 				<p><u>Implementation</u></p>
 				<p>
-					In traditional rendering and in Task 1, we sampled the point in the middle of the pixel by adding <code>0.5</code> to the <code>x</code> and <code>y</code> axis to determine the pixel's color. This can lead to aliasing issues especially along edges and curves, creating jaggies which is displayed with our results from rasterization done in Task 1. With supersampling, multiple sample points are taken within each pixel instead of just sampling one point per pixel. We divide each pixel into 4, 9, and 16 squares — essentially 4, 9, and 16 points inside each pixel. Since each pixel is divided into subsamples, each is essentially treated as their own points/"pixels" and were thus subject to the same sampling method of whether the point was inside or outside the triangle.
+					In traditional rendering and in Task 1, we sampled the point in the middle of the pixel by adding <code>0.5</code> to the <code>x</code> and <code>y</code> axis to determine the pixel's color. This can lead to aliasing issues especially along edges and curves, creating jaggies which is displayed with our results from rasterization done in Task 1. With supersampling, multiple sample points are taken within each pixel instead of just sampling one point per pixel. We divide each pixel into <code>4</code>, <code>9</code>, and <code>16</code> squares — essentially <code>4</code>, <code>9</code>, and <code>16</code> points inside each pixel. Since each pixel is divided into subsamples, each is essentially treated as their own points/"pixels" and were thus subject to the same sampling method of whether the point was inside or outside the triangle.
 				</p>
 
 				<p>
@@ -71,7 +71,7 @@
 				</p>
 
 				<p>
-					For the rasterization pipeline, we made a few modifications to the rasterization pipeline in the process. Specifically, we utilized the <code>sample_rate</code> variable previously defined to specify the number of samples per pixel. In the <code>resolve_to_framebuffer</code> function, instead of directly copying colors from the sample buffer to the framebuffer, colors from all sample points within each pixel are averaged to produce the pixel's final color. We also updated <code>set_sample_rate</code>, <code>set_framebuffer_target</code> and <code>resolve_to_framebuffer</code> to account for the changes in <code>sample_rate</code>. An important note is that despite supersampling enabling "smoother" and more detailed images, it increases computational cost since more samples need to be processed for each pixel.
+					For the rasterization pipeline, we made a few modifications to the rasterization pipeline in the process. Specifically, we utilized the <code>sample_rate</code> variable previously defined to specify the number of samples per pixel. In the <code>resolve_to_framebuffer</code> function, instead of directly copying colors from the sample buffer to the framebuffer, colors from all sample points within each pixel are averaged to produce the pixel's final color. We also updated <code>set_sample_rate()</code>, <code>set_framebuffer_target()</code> and <code>resolve_to_framebuffer()</code> to account for the changes in <code>sample_rate</code>. An important note is that despite supersampling enabling "smoother" and more detailed images, it increases computational cost since more samples need to be processed for each pixel.
 				</p>
 
 				<p>Here is the screenshot of basic/test4.svg with the default viewing parameters and sample rate of 1 per pixel:</p>
@@ -80,7 +80,7 @@
 				</div>
 
 				<p>
-					We zoom in on a very skinny corner of the pink triangle. When we only sample once per pixel, entire pieces of the triangle are missing but as we sample more times per pixel, more of the triangle "appears"/"fills in". This is because of the averaging color effect that reduces aliasing - for example, if a sample was 50% covered by the triangle, it would be closer to 50% the saturation of the triangle color. 
+					We zoom in on a very skinny corner of the pink triangle. When we only sample once per pixel, entire pieces of the triangle are missing but as we sample more times per pixel, more of the triangle "appears"/"fills in". This is because of the averaging color effect that reduces aliasing - for example, if a sample was <code>50%</code> covered by the triangle, it would be closer to <code>50%</code> the saturation of the triangle color. 
 				</p>
 			
 			<hr>
@@ -140,28 +140,28 @@
 					The closer the point is to one of the corners, that corner's color will have a stronger influence on the fill color. Pixel sampling typically gives us better rendering since textures appear smoother as a result of averaging texels - less jumps between neighboring pixels. 
 				</p>
 
-				<p>Here is the screenshot of nearest sampling at 1 sample per pixel:</p>
-				<div align="middle">
-					<img src="images/task5_nearest_1_sample.png" align="middle"/>
+				<p>Here is the screenshot of nearest sampling at <code>1</code> sample per pixel:</p>
+				<div align="left">
+					<img src="images/task5_nearest_1_sample.png" align="left"/>
 				</div>
 
-				<p>Here is the screenshot of nearest sampling at 16 samples per pixel:</p>
-				<div align="middle">
-					<img src="images/task5_nearest_16_samples.png" align="middle"/>
+				<p>Here is the screenshot of nearest sampling at <code>16</code> samples per pixel:</p>
+				<div align="right">
+					<img src="images/task5_nearest_16_samples.png" align="right"/>
 				</div>
 
-				<p>Here is the screenshot of bilinear sampling at 1 sample per pixel:</p>
-				<div align="middle">
-					<img src="images/task5_bilinear_1_sample.png" align="middle"/>
+				<p>Here is the screenshot of bilinear sampling at <code>1</code> sample per pixel:</p>
+				<div align="left">
+					<img src="images/task5_bilinear_1_sample.png" align="left"/>
 				</div>
 
-				<p>Here is the screenshot of bilinear sampling at 16 samples per pixel:</p>
-				<div align="middle">
-					<img src="images/task5_bilinear_16_samples.png" align="middle"/>
+				<p>Here is the screenshot of bilinear sampling at <code>16</code> samples per pixel:</p>
+				<div align="right">
+					<img src="images/task5_bilinear_16_samples.png" align="right"/>
 				</div>
 
 				<p>
-					At lower sampling rates, the differences between the two methods are less obvious but as the sampling rate increases, bilinear sampling is generally better, especially when there are large variations in texel colors within a small area (ex: detailed textures) as pictured above. The nearest sampling at one sample per pixel is extremely pixelated in the magnified image but bilinear sampling "smoothens" this out even if we sample at one sample per pixel. Bilinear sampling at 16 samples per pixel is very "smooth" since the area is relatively small. We noticed that the largest difference between nearest and bilinear sampling is when there are significant changes in texel colors within a pixel. This makes sense because bilinear sampling will interpolate between texels whereas nearest sampling is unable to do so, potentially resulting in aliasing artifacts. 
+					At lower sampling rates, the differences between the two methods are less obvious but as the sampling rate increases, bilinear sampling is generally better, especially when there are large variations in texel colors within a small area (ex: detailed textures) as pictured above. The nearest sampling at one sample per pixel is extremely pixelated in the magnified image but bilinear sampling "smoothens" this out even if we sample at one sample per pixel. Bilinear sampling at <code>16</code> samples per pixel is very "smooth" since the area is relatively small. We noticed that the largest difference between nearest and bilinear sampling is when there are significant changes in texel colors within a pixel. This makes sense because bilinear sampling will interpolate between texels whereas nearest sampling is unable to do so, potentially resulting in aliasing artifacts. 
 				</p>
 			<hr>
 
@@ -171,7 +171,7 @@
 				<p><u>Implementation</u></p>
 
 				<p>
-					Level sampling enables users to sample from textures with different precision levels. Mipmaps are a form of a low-pass filter to downsample the texture file, store the lower resolutions for each location then use it to downsample/minify the texture (ex: using multiple texture levels in a mipmap). In texture mapping, we generally want higher-resolution levels for areas with greater detail and lower-resolution levels for areas that require less sampling, thus enabling higher sampling and space efficiency. For example we can use level zero image for close distances and use higher level image for further objects. Level sampling also allows us to estimate the texture footprint using coordinates of neighboring screen samples.
+					Level sampling enables users to sample from textures with different precision levels. Mipmaps are a form of a low-pass filter to downsample the texture file, store the lower resolutions for each location then use it to downsample/minify the texture (ex: using multiple texture levels in a mipmap). In texture mapping, we generally want higher-resolution levels for areas with greater detail and lower-resolution levels for areas that require less sampling, thus enabling higher sampling and space efficiency. For example, we can use level zero image for close distances and use higher level image for further objects. Level sampling also allows us to estimate the texture footprint using coordinates of neighboring screen samples.
 				</p>
 
 				<p>
@@ -195,24 +195,24 @@
 				</p>
 
 
-				<p>Here is the screenshot of L_ZERO and P_NEAREST:</p>
-				<div align="middle">
-					<img src="images/lzero_pnearest.jpeg" align="middle"/>
+				<p>Here is the screenshot of <code>L_ZERO</code> and <code>P_NEAREST</code>:</p>
+				<div align="left">
+					<img src="images/lzero_pnearest.jpeg" align="left"/>
 				</div>
 
-				<p>Here is the screenshot of L_ZERO and P_LINEAR:</p>
-				<div align="middle">
-					<img src="images/lzero_plinear.png" align="middle"/>
+				<p>Here is the screenshot of <code>L_ZERO</code> and <code>P_LINEAR</code>:</p>
+				<div align="right">
+					<img src="images/lzero_plinear.png" align="right"/>
 				</div>
 
-				<p>Here is the screenshot of L_NEAREST and P_NEAREST:</p>
-				<div align="middle">
-					<img src="images/lnearest_pnearest.jpeg" align="middle"/>
+				<p>Here is the screenshot of <code>L_NEAREST</code> and <code>P_NEAREST</code>:</p>
+				<div align="left">
+					<img src="images/lnearest_pnearest.jpeg" align="left"/>
 				</div>
 
-				<p>Here is the screenshot of L_NEAREST and P_LINEAR:</p>
-				<div align="middle">
-					<img src="images/lnearest_plinear.png" align="middle"/>
+				<p>Here is the screenshot of <code>L_NEAREST</code> and <code>P_LINEAR</code>:</p>
+				<div align="right">
+					<img src="images/lnearest_plinear.png" align="right"/>
 				</div>
 			<hr>
 		</div>
