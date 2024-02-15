@@ -39,9 +39,16 @@
 			<h3 align="middle">Task 1: Drawing Single-Color Triangles</h3>
 			<hr>
 				<p><u>Implementation</u></p>
-				<p>To rasterize triangles, we first need to determine the boundary box to account for edges and find the boundary of where a point would be included and where it won't. The bounding box is defined as the rectangle from $(x_{\text{min}}, y_{\text{min}})$ to $(x_{\text{max}}, y_{\text{max}})$. $x_{\text{min}}$ is determined as the minimum `x` cordinate of the vertices passed in as input by using the `min` and `floor` functions. $x_{\text{max}}$ is similarly calculated but with the `max` function instead. The same process was done for the `y` coordinate. These values represent the smallest and largest `x` and `y` values out of the points given as input. Therefore, our algorithm only looks at points/pixels within the bounding box of the triangle.</p>
-				<p>Next, we implemented the line test method taught in lecture to determine whether a point laid inside or outside of the triangle. To do this, we initially created a lambda function that determined whether the point is to the left, right, or on the edge/line `AB`. If the point is on the same side of each triangle edge, this meant that the point is inside the triangle. Later on the project, we created a separate helper function defined as `point_inside()` that did the line test calculation for each line of the triangle outside of `rasterize_triangle()` for more convenient usage. Our implementation ensures that the line test would work regardless of the winding order of the vertices.</p>
-				<p>After that, we now know the boundary box so we're able to iterate over every single pixel using a double for loop. Using our helper function, if the point is in the triangle, we send the according color to the frame buffer using `fill_pixel()`. This color could be a given color or sampled from a texture.</p>
+				<p>
+					To rasterize triangles, we first need to determine the boundary box to account for edges and find the boundary of where a point would be included and where it won't. The bounding box is defined as the rectangle from \((x_{\text{min}}, y_{\text{min}})\) to \((x_{\text{max}}, y_{\text{max}})\). \(x_{\text{min}}\) is determined as the minimum `x` coordinate of the vertices passed in as input by using the `min` and `floor` functions. \(x_{\text{max}}\) is similarly calculated but with the `max` function instead. The same process was done for the `y` coordinate. These values represent the smallest and largest `x` and `y` values out of the points given as input. Therefore, our algorithm only looks at points/pixels within the bounding box of the triangle.
+				</p>
+				<p>
+					Next, we implemented the line test method taught in the lecture to determine whether a point laid inside or outside of the triangle. To do this, we initially created a lambda function that determined whether the point is to the left, right, or on the edge/line \(AB\). If the point is on the same side of each triangle edge, this meant that the point is inside the triangle. Later on the project, we created a separate helper function defined as `point_inside()` that did the line test calculation for each line of the triangle outside of `rasterize_triangle()` for more convenient usage. Our implementation ensures that the line test would work regardless of the winding order of the vertices.
+				</p>
+    				<p>
+					After that, we now know the boundary box so we're able to iterate over every single pixel using a double for loop. Using our helper function, if the point is in the triangle, we send the according color to the frame buffer using `fill_pixel()`. This color could be a given color or sampled from a texture.
+    				</p>
+			
 				<p>Here is an example of basic triangles with aliasing displayed:</p>
 				<div align="middle">
 					<img src="images/task1_image.png" align="middle"/>
