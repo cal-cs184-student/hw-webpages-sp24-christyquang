@@ -7,16 +7,19 @@
 			    margin: auto;
 			    text-align: left;
 			    font-weight: 300;
-			    font-family: 'Verdana', sans-serif;
+			    font-family: 'Nunito', sans-serif;
 			    color: #121212;
 			  }
 			  h1, h2, h3, h4 {
-			    font-family: 'Source Sans Pro', sans-serif;
+			    font-family: 'Nunito', sans-serif;
 			  }
 		</style>
 		<title>CS 184 Project 1: Rasterizer</title>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<link href=https://fonts.googleapis.com/css?family=Nunito rel="stylesheet">
+
+		<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 	</head>
 	
 	<body>
@@ -29,13 +32,13 @@
 		<div>
 			<h2 align="middle">Overview</h2>
 			<hr>
-				<p>In this project, we built a simple rasterizer based on triangles. The final program is a functional vector graphics renderer that can take in a simplfied version of SVG (Scalable Vector Graphics) files and apply PNG textures to them. Within this program, we first drew triangles with a rasterization technique but since this implementation is simple, this resulted in aliasing artifacts and jaggies in the images. To solve this, we incorporated supersampling which allowed multiple sample points to be taken within each pixel instead of just sampling one point per pixel. There is less aliasing present within the images rasterized but we wanted to have the ability to orient them differently, so we implemented transformation functionality (rotation). Afterwards, we utilized the barycentric coordinate system to help us determine colors inside a triangle since previously, we were only working with a single color within the triangle. This system also allowed us to sample points from texture space, enabling us to apply textures onto a surface after transforming between the image and texture coordinates. We are able to differentiate which sampling method to utilize (nearest vs bilinear) within texture mapping with antialiasing. Specifically, the close and further distances in an image creates jaggies and aliasing which we solved by using level sampling (mipmap) — the ability to sample from textures with different precision levels.
+				<p>In this project, we built a simple rasterizer based on triangles. The final program is a functional vector graphics renderer that can take in a simplfied version of SVG (Scalable Vector Graphics) files and apply PNG textures to them. Within this program, we first drew triangles with a rasterization technique but since this implementation is simple, this resulted in aliasing artifacts and jaggies in the images. To solve this, we incorporated supersampling which allowed multiple sample points to be taken within each pixel instead of just sampling one point per pixel. There is less aliasing present within the images rasterized but we wanted to have the ability to orient them differently, so we implemented transformation functionality (rotation). Afterwards, we utilized the barycentric coordinate system to help us determine colors inside a triangle since previously, we were only working with a single color within the triangle. This system also allowed us to sample points from texture space, enabling us to apply textures onto a surface after transforming between the image and texture coordinates. We are able to differentiate which sampling method to utilize (nearest vs bilinear) within texture mapping with antialiasing. Specifically, the close and further distances in an image creates jaggies and aliasing which we solved by using level sampling (mipmap) — the ability to sample from textures with different precision levels.</p>
 				<p>I've never worked with graphics before so I thought it was fascinating how we were able to completely work our way down the rasterization pipeline, starting from drawing triangles to coloring them, rotating, then applying textures. The codebase was a bit difficult initially to work through since I wasn't familiar with the different methods provided but after spending hours on this project, it was very rewarding to see the output of my results through the cool images rasterized, antialiased, and texturized!</p>
 			<hr>
 
 			<h3 align="middle">Task 1: Drawing Single-Color Triangles</h3>
 			<hr>
-				<p><u>Implementation</u> </p>
+				<p><u>Implementation</u></p>
 				<p>To rasterize triangles, we first need to determine the boundary box to account for edges and find the boundary of where a point would be included and where it won't. The bounding box is defined as the rectangle from $(x_{\text{min}}, y_{\text{min}})$ to $(x_{\text{max}}, y_{\text{max}})$. $x_{\text{min}}$ is determined as the minimum `x` cordinate of the vertices passed in as input by using the `min` and `floor` functions. $x_{\text{max}}$ is similarly calculated but with the `max` function instead. The same process was done for the `y` coordinate. These values represent the smallest and largest `x` and `y` values out of the points given as input. Therefore, our algorithm only looks at points/pixels within the bounding box of the triangle.</p>
 				<p>Next, we implemented the line test method taught in lecture to determine whether a point laid inside or outside of the triangle. To do this, we initially created a lambda function that determined whether the point is to the left, right, or on the edge/line `AB`. If the point is on the same side of each triangle edge, this meant that the point is inside the triangle. Later on the project, we created a separate helper function defined as `point_inside()` that did the line test calculation for each line of the triangle outside of `rasterize_triangle()` for more convenient usage. Our implementation ensures that the line test would work regardless of the winding order of the vertices.</p>
 				<p>After that, we now know the boundary box so we're able to iterate over every single pixel using a double for loop. Using our helper function, if the point is in the triangle, we send the according color to the frame buffer using `fill_pixel()`. This color could be a given color or sampled from a texture.</p>
