@@ -51,7 +51,7 @@
 			
 				<p>Here is an example of basic triangles with aliasing displayed:</p>
 				<div align="middle">
-					<img src="images/task1_image.png" align="middle"/>
+					<img src="images/task1_image.png" align="middle" width="800px"/>
 				</div>
 			<hr>
 
@@ -74,9 +74,24 @@
 					For the rasterization pipeline, we made a few modifications to the rasterization pipeline in the process. Specifically, we utilized the <code>sample_rate</code> variable previously defined to specify the number of samples per pixel. In the <code>resolve_to_framebuffer</code> function, instead of directly copying colors from the sample buffer to the framebuffer, colors from all sample points within each pixel are averaged to produce the pixel's final color. We also updated <code>set_sample_rate()</code>, <code>set_framebuffer_target()</code> and <code>resolve_to_framebuffer()</code> to account for the changes in <code>sample_rate</code>. An important note is that despite supersampling enabling "smoother" and more detailed images, it increases computational cost since more samples need to be processed for each pixel.
 				</p>
 
-				<p>Here is the screenshot of basic/test4.svg with the default viewing parameters and sample rate of 1 per pixel:</p>
+				<p>Here is the screenshot of <code>basic/test4.svg</code> with the default viewing parameters and sample rate of <code>1</code> per pixel:</p>
 				<div align="middle">
-					<img src="images/basic:test4.svg_rate1.png" align="middle"/>
+					<img src="images/basic_test4.svg_rate1.png" align="middle"/>
+				</div>
+
+				<p>Here is the screenshot of <code>basic/test4.svg</code> with the default viewing parameters and sample rate of <code>4</code> per pixel:</p>
+				<div align="middle">
+					<img src="images/basic_test4.svg_rate4.png" align="middle"/>
+				</div>
+
+				<p>Here is the screenshot of <code>basic/test4.svg</code> with the default viewing parameters and sample rate of <code>9</code> per pixel:</p>
+				<div align="middle">
+					<img src="images/basic_test4.svg_rate9.png" align="middle"/>
+				</div>
+
+				<p>Here is the screenshot of <code>basic/test4.svg</code> with the default viewing parameters and sample rate of <code>16</code> per pixel:</p>
+				<div align="middle">
+					<img src="images/basic_test4.svg_rate16.png" align="middle"/>
 				</div>
 
 				<p>
@@ -197,22 +212,22 @@
 
 				<p>Here is the screenshot of <code>L_ZERO</code> and <code>P_NEAREST</code>:</p>
 				<div align="left">
-					<img src="images/lzero_pnearest.jpeg" align="left"/>
+					<img src="images/lzero_pnearest.jpeg" align="left" width="500px"/>
 				</div>
 
 				<p>Here is the screenshot of <code>L_ZERO</code> and <code>P_LINEAR</code>:</p>
 				<div align="right">
-					<img src="images/lzero_plinear.png" align="right"/>
+					<img src="images/lzero_plinear.png" align="right" width="500px"/>
 				</div>
 
 				<p>Here is the screenshot of <code>L_NEAREST</code> and <code>P_NEAREST</code>:</p>
 				<div align="left">
-					<img src="images/lnearest_pnearest.jpeg" align="left"/>
+					<img src="images/lnearest_pnearest.jpeg" align="left" width="500px"/>
 				</div>
 
 				<p>Here is the screenshot of <code>L_NEAREST</code> and <code>P_LINEAR</code>:</p>
 				<div align="right">
-					<img src="images/lnearest_plinear.png" align="right"/>
+					<img src="images/lnearest_plinear.png" align="right" width="500px"/>
 				</div>
 			<hr>
 		</div>
