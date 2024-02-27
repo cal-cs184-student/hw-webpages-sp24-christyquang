@@ -2,14 +2,14 @@
 	<head>
 		<style>
 			body {
-			    background-color: #ebfcec;
+			    background-color: #d5f4f7;
 			    padding: 100px;
 			    width: 1000px;
 			    margin: auto;
 			    text-align: left;
 			    font-weight: 300;
 			    font-family: 'Nunito', sans-serif;
-			    color: #d5f4f7;
+			    color: #121212;
 			  }
 			  h1, h2, h3, h4 {
 			    font-family: 'Nunito', sans-serif;
@@ -33,17 +33,29 @@
 			<h2 align="middle">Overview</h2>
 			
 			<h2 align="middle">Section I: Bezier Curves and Surfaces</h2>
-			<p>
-				de Casteljau's algorithm is a recursive method that allows us to calculate a Bezier curve from a set of points. Given <code>n</code> control points, we recursively subdivide the <code>n-1</code> line segments between the control points and define interpolated points. The process involves connecting the points to create edges, then we evaluate each edge at a parameter <code>t</code> which is between <code>0</code> and <code>1</code>, representing a fraction of the distance from one point to the other point. For example, we can have points <code>x0</code> and <code>x1</code>, where point <code>x01</code> is along the line from <code>x0</code>. Since <code>t</code> determines our location between the points, when <code>t = 0</code>, we are at <code>x0</code>. We connect the points to get a connection of edges that is one less than the previous number of edges. We recursively interpolate points until we run out of line segments (keep creating line segments between adjacent interpolated points and put a new interpolated point on that line segment). The final point we arrive at is a point on the Bezier curve at the given parameter <code>t</code>.
-			</p>
-
-			<p>
-				We implemented <code>evaluateStep</code> which performs one step of the algorithm (or one level of subdivision) each time it is called. First, we obtain the size of the most recent level using <code>points.size()</code>. If the level is <code>1</code>, we can just return <code>points</code>. Otherwise, we use the algebraic formula $$p_i' = \text{lerp}(p_i, p_{i+1}, t) = (1 - t)p_i + tp_{i+1}$$ to find the interpolated point between each pair of adjacenet points up to the most recent level (<code>numPoints - 1</code>), enabling us to get to the last evaluated point.
-			</p>
-
+			
 			<h3 align="middle">Part 1: Bezier curves with 1D de Casteljau subdivision</h3>
+			<hr>
+				<p>
+					de Casteljau's algorithm is a recursive method that allows us to calculate a Bezier curve from a set of points. Given <code>n</code> control points, we recursively subdivide the <code>n-1</code> line segments between the control points and define interpolated points. The process involves connecting the points to create edges, then we evaluate each edge at a parameter <code>t</code> which is between <code>0</code> and <code>1</code>, representing a fraction of the distance from one point to the other point. For example, we can have points <code>x0</code> and <code>x1</code>, where point <code>x01</code> is along the line from <code>x0</code>. Since <code>t</code> determines our location between the points, when <code>t = 0</code>, we are at <code>x0</code>. We connect the points to get a connection of edges that is one less than the previous number of edges. We recursively interpolate points until we run out of line segments (keep creating line segments between adjacent interpolated points and put a new interpolated point on that line segment). The final point we arrive at is a point on the Bezier curve at the given parameter <code>t</code>.
+				</p>
+	
+				<p>
+					We implemented <code>evaluateStep</code> which performs one step of the algorithm (or one level of subdivision) each time it is called. First, we obtain the size of the most recent level using <code>points.size()</code>. If the level is <code>1</code>, we can just return <code>points</code>. Otherwise, we use the algebraic formula $$p_i' = \text{lerp}(p_i, p_{i+1}, t) = (1 - t)p_i + tp_{i+1}$$ to find the interpolated point between each pair of adjacenet points up to the most recent level (<code>numPoints - 1</code>), enabling us to get to the last evaluated point.
+				</p>
+			<hr>
 
 			<h3 align="middle">Part 2: Bezier surfaces with separable 1D de Casteljau</h3>
+			<hr>
+				<p>
+					The de Casteljau algorithm extends to Bezier surfaces because we are able to apply the same process we did for the 1 dimensional curve to a 2 dimensional curve by adding another dimension. Applying multiple Bezier curves together creates a Bezier surface. In Part 1, we had <code>n</code> control points to define a Bezier curve but in Part 2, we had an array of <code>n x n</code> control points to define a Bezier curve. We called the <code>evaluate1D</code> function repeatedly to determine the initial set of Bezier curves in the <code>u</code> direction. To extend the Bezier curves to a Bezier surface, we evaluated the <code>u</code> points at parameter <code>t</code> in the <code>v</code> direction. 
+				</p>
+
+				<div style="text-align: center;">
+				    	<img src="images/task2.png" width="750px" />
+					<p>Screenshot of <code>bez/teapot.bez</code></p>
+				</div>
+			<hr>
 
 			<h2 align="middle">Section II: Triangle Meshes and Half-Edge Data Structure</h2>
 
