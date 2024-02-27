@@ -31,6 +31,15 @@
 
 		<div>
 			<h2 align="middle">Overview</h2>
+			<hr>
+				<p>
+					In this project, we build Bezier curves and surfaces using algorithms such as the de Casteljau algorithm. We also implememt features to manipulate give triangle meshes using the half-edge data structure. These features include performing edge splitting and edge flipping, which ultimately allows us to implement loop subdivision. This is quite an important feature for geometric 3D modeling, as it allows the artist to smoothen their meshes, as well as make them more detailed and customized to their liking. Being able to edit meshes after their original creation provides ease of modeling and being able to make small edits with the mesh. Focusing on the Bezier curves and surfaces themselves, implementing these features allows us to understand exactly how curvature is able to be simulated in a realistic way. Creating Bezier curves and surfaces allows us to create meshes in the first place, which we can then use to model 3D objects and edit the meshes with the functions described earlier.
+				</p>
+
+				<p>
+					We found it particularly interesting how the assignment builds on each other, and allows full understanding of what lays underneath geometric modeling. First, we build the actual Bezier curves and surfaces, then we build implementation to edit these curves and meshes to our liking. It was especially interesting navigating the half-edge data structure. Although a bit complicated at first, the different parameters and built-in functions proved to be extremely useful when working with the meshes. It allowed for easy access to the different parts of the mesh, so that we could edit only exactly what we needed to edit without a lot of overhead.
+				</p>
+			<hr>
 			
 			<h2 align="middle">Section I: Bezier Curves and Surfaces</h2>
 			
@@ -171,8 +180,153 @@
 			<hr>
 
 			<h3 align="middle">Part 6: Loop subdivision for mesh upsampling</h3>
+			<hr>
+				<p>
+					To implement loop subdivision, we mainly followed the steps given in the spec and in the function definition. We first computed all the new positions of the original vertices, as well as the position of the new vertices created by edge splitting. Then, we actually split the edge, making sure to only split the original edges and not the newly added edges. Afterwards, we flip certain edges, being careful that we are only flipping those that connect a new and old vertex, and are also newly added edges. Finally, we actually update the vertex positions with the values that were calculated earlier. One very key and interesting implementation trick we used is to use the <code>isNew</code> flag for vertices and edges, helping us ensure that we were only splitting and flipping the edges that we need to. This involved going back to the previous functions, specifically <code>splitEdge</code>, and setting the <code>isNew</code> flag whenever we created a new vertex or edge. 
+				</p>
 
-			
+				<p>
+					It seems that after loop subdivision, the sharp corners and edges are smoothened out. They become more round, as shown in these pictures below.
+				</p>
+
+				<div style="display: flex; justify-content: space-between;">
+				    	<div style="flex: 1; margin-right: 10px; text-align: center;">
+				        	<img src="images/task6-icosahedron1.png" width="100%" />
+						<p>
+							Icosahedron Loop Subdivision 1
+						</p>
+				    	</div>
+				    	<div style="flex: 1; margin-left: 10px; text-align: center;">
+				        	<img src="images/task6-icosahedron2.png" width="100%" />
+						<p>
+							Icosahedron Loop Subdivision 2
+						</p>
+				    	</div>
+				</div>
+
+				<br><br>
+				
+				<div style="display: flex; justify-content: space-between;">
+					
+				    	<div style="flex: 1; margin-right: 10px; text-align: center;">
+				        	<img src="images/task6-torus1.png" width="100%" />
+						<p>
+							Torus Loop Subdivision 1
+						</p>
+				    	</div>
+				    	<div style="flex: 1; margin-left: 10px; text-align: center;">
+				        	<img src="images/task6-torus2.png" width="100%" />
+						<p>
+							Torus Loop Subdivision 2
+						</p>
+				   	 </div>
+				</div>
+
+				<br><br>
+
+				<div style="display: flex; justify-content: space-between;">
+					
+				    	<div style="flex: 1; margin-right: 10px; text-align: center;">
+				        	<img src="images/task6-cow1.png" width="100%" />
+						<p>
+							Cow Loop Subdivision 1
+						</p>
+				    	</div>
+				    	<div style="flex: 1; margin-left: 10px; text-align: center;">
+				        	<img src="images/task6-cow2.png" width="100%" />
+						<p>
+							Cow Loop Subdivision 2
+						</p>
+				   	 </div>
+				</div>
+
+				<br><br>
+
+				<p>
+					There are some cases where this is ideal, but others where we'd want to keep the sharpness of corners and edges while still performing subdivision. In these cases, we could potentially pre-split some edges, specifically those that aren't edges and corners. We could potentially calculate whether something is an edge or corner by looking at the angle of two connecting faces, or have another flag that marks this information.
+				</p>
+
+				<p>
+					Here are screenshots of several iterations of loop subdivision on the cube.
+				</p>
+
+				<div style="display: flex; justify-content: space-between;">
+				    	<div style="flex: 1; margin-right: 10px; text-align: center;">
+				        	<img src="images/task6-cube1.png" width="100%" />
+						<p>
+							Cube Loop Subdivision 1
+						</p>
+				    	</div>
+				    	<div style="flex: 1; margin-left: 10px; text-align: center;">
+				        	<img src="images/task6-cube2.png" width="100%" />
+						<p>
+							Cube Loop Subdivision 2
+						</p>
+				    	</div>
+				</div>
+
+				<br><br>
+				
+				<div style="display: flex; justify-content: space-between;">
+					
+				    	<div style="flex: 1; margin-right: 10px; text-align: center;">
+				        	<img src="images/task6-cube3.png" width="100%" />
+						<p>
+							Cube Loop Subdivision 3
+						</p>
+				    	</div>
+				    	<div style="flex: 1; margin-left: 10px; text-align: center;">
+				        	<img src="images/task6-cube4.png" width="100%" />
+						<p>
+							Cube Loop Subdivision 4
+						</p>
+				   	 </div>
+				</div>
+
+				<br><br>
+
+				<div style="display: flex; justify-content: space-between;">
+					
+				    	<div style="flex: 1; margin-right: 10px; text-align: center;">
+				        	<img src="images/task6-cube5.png" width="100%" />
+						<p>
+							Cube Loop Subdivision 5
+						</p>
+				    	</div>
+				    	<div style="flex: 1; margin-left: 10px; text-align: center;">
+				        	<img src="images/task6-cube6.png" width="100%" />
+						<p>
+							Cube Loop Subdivision 6
+						</p>
+				   	 </div>
+				</div>
+
+				<br><br>
+
+				<p>
+					As we can see, the cube becomes slightly asymmetric after repeated subdivisions. This could be because splitting and flipping the edges on the side of the cube have different results from splitting and flipping the edges that lay on the surface of the cube. For the cube specifically, it ends up being asymmetric because the faces of the cube only have one diagonal, instead of a symmetric two diagonals. As a result, when we pre-process the splitting and flipping of edges, we can control which ones we do so that only the ones that keep the symmetry of the cube are edited. 
+				</p>
+
+				<p>
+					Here are screenshots of loop subdivision on the cube, but with edges pre-processed before the loop subdivision. In this case, we are splitting the edges on the faces of the cube before performing loop subdivision on the whole cube.
+				</p>
+
+				<div style="display: flex; justify-content: space-between;">
+					
+				    	<div style="flex: 1; margin-right: 10px; text-align: center;">
+				        	<img src="images/task6-preprocess-cube1.png" width="100%" />
+						<p>
+							Preprocessed Loop Subdivision 1
+						</p>
+				    	</div>
+				    	<div style="flex: 1; margin-left: 10px; text-align: center;">
+				        	<img src="images/task6-preprocess-cube2.png" width="100%" />
+						<p>
+							Preprocessed Loop Subdivision 2
+						</p>
+				   	 </div>
+				</div>
+			<hr>
 		</div>
 	</body>
 </html>
