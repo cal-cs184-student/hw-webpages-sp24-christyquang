@@ -1,7 +1,61 @@
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 	<head>
+		<style>
+			body {
+			    background-color: #ebfcec;
+			    padding: 100px;
+			    width: 1000px;
+			    margin: auto;
+			    text-align: left;
+			    font-weight: 300;
+			    font-family: 'Nunito', sans-serif;
+			    color: #d5f4f7;
+			  }
+			  h1, h2, h3, h4 {
+			    font-family: 'Nunito', sans-serif;
+			  }
+		</style>
+		<title>CS 184 Project 2: MeshEdit</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<link href=https://fonts.googleapis.com/css?family=Nunito rel="stylesheet">
+
+		<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 	</head>
 	<body>
-		Homework 2 index.html here
+		<h1 align="middle">CS 184: Computer Graphics and Imaging, Spring 2024</h1>
+		<h1 align="middle">Project 2: MeshEdit</h1>
+		<h2 align="middle">Christy Quang, Anya Agarwal</h2>
+
+		<br><br>
+
+		<div>
+			<h2 align="middle">Overview</h2>
+			
+			<h2 align="middle">Section I: Bezier Curves and Surfaces</h2>
+			<p>
+				de Casteljau's algorithm is a recursive method that allows us to calculate a Bezier curve from a set of points. Given <code>n</code> control points, we recursively subdivide the <code>n-1</code> line segments between the control points and define interpolated points. The process involves connecting the points to create edges, then we evaluate each edge at a parameter <code>t</code> which is between <code>0</code> and <code>1</code>, representing a fraction of the distance from one point to the other point. For example, we can have points <code>x0</code> and <code>x1</code>, where point <code>x01</code> is along the line from <code>x0</code>. Since <code>t</code> determines our location between the points, when <code>t = 0</code>, we are at <code>x0</code>. We connect the points to get a connection of edges that is one less than the previous number of edges. We recursively interpolate points until we run out of line segments (keep creating line segments between adjacent interpolated points and put a new interpolated point on that line segment). The final point we arrive at is a point on the Bezier curve at the given parameter <code>t</code>.
+			</p>
+
+			<p>
+				We implemented <code>evaluateStep</code> which performs one step of the algorithm (or one level of subdivision) each time it is called. First, we obtain the size of the most recent level using <code>points.size()</code>. If the level is <code>1</code>, we can just return <code>points</code>. Otherwise, we use the algebraic formula $$p_i' = \text{lerp}(p_i, p_{i+1}, t) = (1 - t)p_i + tp_{i+1}$$ to find the interpolated point between each pair of adjacenet points up to the most recent level (<code>numPoints - 1</code>), enabling us to get to the last evaluated point.
+			</p>
+
+			<h3 align="middle">Part 1: Bezier curves with 1D de Casteljau subdivision</h3>
+
+			<h3 align="middle">Part 2: Bezier surfaces with separable 1D de Casteljau</h3>
+
+			<h2 align="middle">Section II: Triangle Meshes and Half-Edge Data Structure</h2>
+
+			<h3 align="middle">Part 3: Area-weighted vertex normals</h3>
+
+			<h3 align="middle">Part 4: Edge flip</h3>
+
+			<h3 align="middle">Part 5: Edge split</h3>
+
+			<h3 align="middle">Part 6: Loop subdivision for mesh upsampling</h3>
+
+			
+		</div>
 	</body>
 </html>
