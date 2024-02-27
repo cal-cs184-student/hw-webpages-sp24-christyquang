@@ -60,10 +60,115 @@
 			<h2 align="middle">Section II: Triangle Meshes and Half-Edge Data Structure</h2>
 
 			<h3 align="middle">Part 3: Area-weighted vertex normals</h3>
+			<hr>
+				<p>
+					We implemented the area-weighted vertex normals by iterating through all the triangles incident to the vertex (faces that have the given vertex as one of the vertices), allowing us to have smoother shading on <code>dae/teapot.dae</code>. First, we iterated through the half-edges incident to the vertex <code>h</code>. Inside the loop, we calculate the normal vector of each triangle incident to the vertex. We found the positions of three vertices: the current vertex (<code>commonPoint</code>) and two vertices connected to it through two consecutive half-edges. Then, we computed the vectors representing the sides of the triangle formed by the vertices. The normal of the triangle is calculated by taking the cross product of these two edges which is added to <code>weightedNormal</code>, accumulating the contributions from all of the triangles (gets the area-weighted normal of the face). After iterating through the faces, we return the re-normalized unit vector by calling <code>weightedNormal.unit()</code>.
+				</p>
+
+				<div style="display: flex; justify-content: space-between;">
+				    	<div style="flex: 1; margin-right: 10px; text-align: center;">
+				        	<img src="images/task3-flat-shading.png" width="100%" />
+						<p>
+							<code>dae/teapot.dae</code> without vertex normals (flat shading)
+						</p>
+				    	</div>
+				    	<div style="flex: 1; margin-left: 10px; text-align: center;">
+				        	<img src="images/task3-phong-shaded.png" width="100%" />
+						<p>
+							<code>dae/teapot.dae</code> with vertex normals (Phong shading)
+						</p>
+				    	</div>
+				</div>
+			<hr>
 
 			<h3 align="middle">Part 4: Edge flip</h3>
+			<hr>
+				<p>
+					When there is an edge shared between two triangles, the edge flip operation changes the orientation such that the edge now spans across the other two corners of the triangles. To do this, we first kept track of all the mesh elements: half-edges, vertices, edges, or faces. The edge flip operation reassigns pointers to these elements so it's important to keep track of where each element changes to, otherwise it's very messy to implement. Before implementing the function, we drew out the before and after meshes of the edge flip, taking note of how each element changed. 
+				</p>
+
+				<div style="text-align: center;">
+				    	<img src="images/task4-brainstorm.jpg" width="750px" />
+					<p>Screenshot of our brainstorming process when implementing the edge flip functionality</p>
+				</div>
+
+				<p>
+					We had hoped that by doing this, it would save us a lot of debugging time since we were certain that the pointers were reassigned correctly. We created variables for every element starting with the half-edges and utilized the <code>setNeighbors</code> function on each half-edge to make sure that the neighboring elements were correctly assigned. Drawing the meshes was extremely helpful but I still spent a couple of hours debugging an extremely small bug where I had written <code>HalfedgeIter h9 = h4->twin();</code> instead of <code>HalfedgeIter h9 = h5->twin();</code>. Besides this terrible bug, the function was fun to implement and here are some screenshots displaying before/after an edge flip, as well as <code>dae/teapot.dae</code> after a series of cool edge flips.
+				</p>
+
+				<div style="display: flex; justify-content: space-between;">
+				    	<div style="flex: 1; margin-right: 10px; text-align: center;">
+				        	<img src="images/task4-before-flip.png" width="100%" />
+						<p>
+							<code>dae/teapot.dae</code> before an edge flip
+						</p>
+				    	</div>
+				    	<div style="flex: 1; margin-left: 10px; text-align: center;">
+				        	<img src="images/task4-after-flip.png" width="100%" />
+						<p>
+							<code>dae/teapot.dae</code> after an edge flip
+						</p>
+				    	</div>
+				</div>
+
+				<div style="text-align: center;">
+				    	<img src="images/task4-cool-flips.png" width="750px" />
+					<p><code>dae/teapot.dae</code> with some cool edge flip</p>
+				</div>
+			<hr>
 
 			<h3 align="middle">Part 5: Edge split</h3>
+			<hr>
+				<p>
+					When there is an edge shared between two triangles, the edge split operation inserts a new vertex <code>m</code> at its midpoint and connects the new vertex to each opposing vertex that didn't previously have an edge connecting to them, creating four triangles from two adjacent triangles. This operation was similar to the edge flip operation but there were a few new components to keep track of since an edge split adds new mesh elements: a new vertex, two new triangles (six new half-edges), three new edges, and two new faces. 
+				</p>
+
+				<p>
+					With all of the new elements being added, there are more pointers to keep track of than for the edge flip operation so we followed the same strategy of drawing out the before and after meshes of the edge split, taking note of how each element changed. 
+				</p>
+
+				<div style="text-align: center;">
+				    	<img src="images/task5-brainstorm.jpg" width="750px" />
+					<p>Screenshot of our brainstorming process when implementing the edge split functionality</p>
+				</div>
+
+				<p>
+					Despite drawing the mesh after the edge split, it was significantly harder than the edge flip functionality because we had to decide where to put the new elements. We created variables for every element starting with the half-edges, and created new variables to represent the new elements being added. Similar to the edge flip method, we utilized the <code>setNeighbors</code> function on each half-edge to make sure that the neighboring elements were correctly assigned. With the new pointers being created/assigned, there are now four half-edge cycles instead of the previous two. As a result, I had to change the half-edges, vertices, edges, twins, and faces for a majority of the half-edges. The new vertex is just the middle distance between the two endpoints of edge <code>e0</code>. The diagram significantly helped me and made implementing this function mostly bug-free.
+				</p>
+
+				<div style="display: flex; justify-content: space-between;">
+				    	<div style="flex: 1; margin-right: 10px; text-align: center;">
+				        	<img src="images/task5-before-split.png" width="100%" />
+						<p>
+							<code>dae/teapot.dae</code> before an edge split
+						</p>
+				    	</div>
+				    	<div style="flex: 1; margin-left: 10px; text-align: center;">
+				        	<img src="images/task5-after-split.png" width="100%" />
+						<p>
+							<code>dae/teapot.dae</code> after an edge split
+						</p>
+				    	</div>
+				</div>
+
+				<br><br>
+				
+				<div style="display: flex; justify-content: space-between;">
+					
+				    	<div style="flex: 1; margin-right: 10px; text-align: center;">
+				        	<img src="images/task5-before-flips-splits.png" width="100%" />
+						<p>
+							Part 1: <code>dae/teapot.dae</code> after some cool edge splits and flips
+						</p>
+				    	</div>
+				    	<div style="flex: 1; margin-left: 10px; text-align: center;">
+				        	<img src="images/task5-after-flips-splits.png" width="100%" />
+						<p>
+							Part 2: <code>dae/teapot.dae</code> after some cool edge splits and flips
+						</p>
+				   	 </div>
+				</div>
+			<hr>
 
 			<h3 align="middle">Part 6: Loop subdivision for mesh upsampling</h3>
 
