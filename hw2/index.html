@@ -52,12 +52,111 @@
 				<p>
 					We implemented <code>evaluateStep</code> which performs one step of the algorithm (or one level of subdivision) each time it is called. First, we obtain the size of the most recent level using <code>points.size()</code>. If the level is <code>1</code>, we can just return <code>points</code>. Otherwise, we use the algebraic formula $$p_i' = \text{lerp}(p_i, p_{i+1}, t) = (1 - t)p_i + tp_{i+1}$$ to find the interpolated point between each pair of adjacenet points up to the most recent level (<code>numPoints - 1</code>), enabling us to get to the last evaluated point.
 				</p>
+
+				<p>
+					Below are screenshots of each step of the evaluation from the original control points down to the final evaluated point.
+				</p>
+
+				<div style="display: flex; justify-content: space-between;">
+				    	<div style="flex: 1; margin-right: 10px; text-align: center;">
+				        	<img src="images/task1-6-control-pts.png" width="100%" />
+						<p>
+							Original control points
+						</p>
+				    	</div>
+				    	<div style="flex: 1; margin-left: 10px; text-align: center;">
+				        	<img src="images/task1-step2.png" width="100%" />
+						<p>
+							Bezier curve Step 1
+						</p>
+				    	</div>
+				</div>
+
+				<br><br>
+				
+				<div style="display: flex; justify-content: space-between;">
+					
+				    	<div style="flex: 1; margin-right: 10px; text-align: center;">
+				        	<img src="images/task1-step3.png" width="100%" />
+						<p>
+							Bezier curve Step 2
+						</p>
+				    	</div>
+				    	<div style="flex: 1; margin-left: 10px; text-align: center;">
+				        	<img src="images/task1-step4.png" width="100%" />
+						<p>
+							Bezier curve Step 3
+						</p>
+				   	 </div>
+				</div>
+
+				<br><br>
+
+				<div style="display: flex; justify-content: space-between;">
+					
+				    	<div style="flex: 1; margin-right: 10px; text-align: center;">
+				        	<img src="images/task1-step5.png" width="100%" />
+						<p>
+							Bezier curve Step 4
+						</p>
+				    	</div>
+				    	<div style="flex: 1; margin-left: 10px; text-align: center;">
+				        	<img src="images/task1-step6.png" width="100%" />
+						<p>
+							Bezier curve Step 5
+						</p>
+				   	 </div>
+
+					<p>
+						Here’s the completed Bezier curve created from running de Casteljau’s algorithm above.
+					</p>
+
+					<div style="text-align: center;">
+					    	<img src="images/task1-6-control-pts-w-completed.png" width="750px" />
+						<p>Completed Bezier curve</p>
+					</div>
+
+					<p>
+						We can also drag and move the original control points to create a new Bezier curve. Below is an example of a modified Bezier curve we've created.
+					</p>
+
+					<div style="text-align: center;">
+					    	<img src="images/task1-diff-curve-step2.png" width="750px" />
+						<p>Different Bezier curve</p>
+					</div>
+
+					<p>
+						Lastly, we are able to modify the parameter <code>t</code> to show the other points lie along the completed green Bezier curve.
+					</p>
+
+					<div style="display: flex; justify-content: space-between;">
+						
+					    	<div style="flex: 1; margin-right: 10px; text-align: center;">
+					        	<img src="images/task1-diff-curve-diff-t-left.png" width="100%" />
+					        	<p>
+					            		Different Bezier curve and lower <code>t</code> value
+					        	</p>
+					    	</div>
+					    	<div style="flex: 1; margin-right: 10px; text-align: center;">
+					        	<img src="images/task1-diff-curve-diff-t-mid.png" width="100%" />
+					        	<p>
+					            		Different Bezier curve and slightly increasing <code>t</code> value
+					        	</p>
+					    	</div>
+					    	<div style="flex: 1; margin-left: 10px; text-align: center;">
+					        	<img src="images/task1-diff-curve-diff-t-right.png" width="100%" />
+					        	<p>
+					            		Different Bezier curve and greatest increasing <code>t</code> value
+					        	</p>
+					    	</div>
+					</div>
+				</div>
 			<hr>
 
 			<h3 align="middle">Part 2: Bezier surfaces with separable 1D de Casteljau</h3>
 			<hr>
 				<p>
-					The de Casteljau algorithm extends to Bezier surfaces because we are able to apply the same process we did for the 1 dimensional curve to a 2 dimensional curve by adding another dimension. Applying multiple Bezier curves together creates a Bezier surface. In Part 1, we had <code>n</code> control points to define a Bezier curve but in Part 2, we had an array of <code>n x n</code> control points to define a Bezier curve. We called the <code>evaluate1D</code> function repeatedly to determine the initial set of Bezier curves in the <code>u</code> direction. To extend the Bezier curves to a Bezier surface, we evaluated the <code>u</code> points at parameter <code>t</code> in the <code>v</code> direction. 
+					The de Casteljau algorithm extends to Bezier surfaces because we are able to apply the same process we did for the 1 dimensional curve to a 2 dimensional curve by adding another dimension. Applying multiple Bezier curves together creates a Bezier surface. In Part 1, we had <code>n</code> control points to define a Bezier curve but in Part 2, we had a matrix of <code>n x n</code> control points to define a Bezier curve. We perform the 1D de Casteljau algorithm on each row to get one point per row for each <code>u</code> via calling the <code>evaluate1D</code> function repeatedly. Then, we performed the algorithm and interpolation again on the points to get the final point in the <code>v</code> direction, resulting in one point that lies on the Bezier surface at the given <code>u</code> and <code>v</code>.
 				</p>
 
 				<div style="text-align: center;">
@@ -102,7 +201,7 @@
 				</div>
 
 				<p>
-					We had hoped that by doing this, it would save us a lot of debugging time since we were certain that the pointers were reassigned correctly. We created variables for every element starting with the half-edges and utilized the <code>setNeighbors</code> function on each half-edge to make sure that the neighboring elements were correctly assigned. Drawing the meshes was extremely helpful but I still spent a couple of hours debugging an extremely small bug where I had written <code>HalfedgeIter h9 = h4->twin();</code> instead of <code>HalfedgeIter h9 = h5->twin();</code>. Besides this terrible bug, the function was fun to implement and here are some screenshots displaying before/after an edge flip, as well as <code>dae/teapot.dae</code> after a series of cool edge flips.
+					We had hoped that by doing this, it would save us a lot of debugging time since we were certain that the pointers were reassigned correctly. We created variables for every element starting with the half-edges and utilized the <code>setNeighbors</code> function on each half-edge to make sure that the neighboring elements were correctly assigned. Drawing the meshes was extremely helpful but I still spent a couple of hours debugging an extremely small bug where I had written <code>HalfedgeIter h9 = h4->twin();</code> instead of <code>HalfedgeIter h9 = h5->twin();</code>. This caused edge flips to not work on certain edges on the teapot which would crash the program. Besides this terrible bug, the function was fun to implement and here are some screenshots displaying before/after an edge flip, as well as <code>dae/teapot.dae</code> after a series of cool edge flips.
 				</p>
 
 				<div style="display: flex; justify-content: space-between;">
