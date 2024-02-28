@@ -281,11 +281,23 @@
 			<h3 align="middle">Part 6: Loop subdivision for mesh upsampling</h3>
 			<hr>
 				<p>
-					To implement loop subdivision, we mainly followed the steps given in the spec and in the function definition. We first computed all the new positions of the original vertices, as well as the position of the new vertices created by edge splitting. Then, we actually split the edge, making sure to only split the original edges and not the newly added edges. Afterwards, we flip certain edges, being careful that we are only flipping those that connect a new and old vertex, and are also newly added edges. Finally, we actually update the vertex positions with the values that were calculated earlier. One very key and interesting implementation trick we used is to use the <code>isNew</code> flag for vertices and edges, helping us ensure that we were only splitting and flipping the edges that we need to. This involved going back to the previous functions, specifically <code>splitEdge</code>, and setting the <code>isNew</code> flag whenever we created a new vertex or edge. 
+					To implement loop subdivision, we mainly followed the steps given in the spec and in the function definition. First, we computed all the new positions of the original vertices, as well as the position of the new vertices created by edge splitting. This involved iterating through all the vertices in the edge, finding the halfedges and calculating the sum of the positions of the adjacent vertices. Specifically, the new position was calculated by <code>v->newPosition = (1.0 - n * u) * v->position + u * weighted_sum;</code>. <code>n</code> represented the number of edges incident to the vertex and <code>u = 3/16</code> if <code>n = 3</code>, otherwise <code>3/(8n)</code>. <code>weightedSum</code> represented the sum of all the original positions of neighboring vertices.
 				</p>
 
 				<p>
-					It seems that after loop subdivision, the sharp corners and edges are smoothened out. They become more round, as shown in these pictures below.
+					To compute the new positions, we traversed through the edges and for each edge, we found the surrounding edges and vertices and calculated <code>e->newPosition = (3.0/8.0) * (v0->position + v1->position) + (1.0/8.0) * (v2->position + v3->position);</code>. <code>v0</code> and <code>v1</code> represented the two vertices connecting the current edge. Then, we actually split the edge, making sure to only split the original edges and not the newly added edges. 
+				</p>
+
+				<p>
+					Afterwards, we flip certain edges, being careful that we are only flipping those that connect a new and old vertex, and are also newly added edges. This was done by iterating through all the edges and flipping them by connecting an old vertex to a new one.
+				</p>
+
+				<p>
+					Finally, we actually update the vertex positions with the values that were calculated earlier by copying their <code>newPosition</code> into their <code>position</code> attribute. One very key and interesting implementation trick we used is incorporating the <code>isNew</code> flag for vertices and edges, helping us ensure that we were only splitting and flipping the edges that we need to. This involved going back to the previous functions, specifically <code>splitEdge</code>, and setting the <code>isNew</code> flag whenever we created a new vertex or edge. 
+				</p>
+
+				<p>
+					It seems that after loop subdivision, the sharp corners and edges are smoothened out. They become more round, as shown in these pictures below because we are increasing the number of triangles, allowing for more smooth curves to develop. 
 				</p>
 
 				<div style="display: flex; justify-content: space-between;">
@@ -340,7 +352,7 @@
 				</div>
 
 				<p>
-					There are some cases where this is ideal, but others where we'd want to keep the sharpness of corners and edges while still performing subdivision. In these cases, we could potentially pre-split some edges, specifically those that aren't edges and corners. We could potentially calculate whether something is an edge or corner by looking at the angle of two connecting faces, or have another flag that marks this information.
+					However with loop subdivision, this results in edges being lost as a result of increasing the number of triangles. There are some cases where this is ideal, but others where we'd want to keep the sharpness of corners and edges while still performing subdivision. In these cases, we could potentially pre-split some edges, specifically those that aren't edges and corners. We could potentially calculate whether something is an edge or corner by looking at the angle of two connecting faces, or have another flag that marks this information.
 				</p>
 
 				<p>
@@ -351,13 +363,13 @@
 				    	<div style="flex: 1; margin-right: 10px; text-align: center;">
 				        	<img src="images/task6-cube1.png" width="100%" />
 						<p>
-							Cube Loop Subdivision 1
+							<code>dae/teapot.dae</code> loaded
 						</p>
 				    	</div>
 				    	<div style="flex: 1; margin-left: 10px; text-align: center;">
 				        	<img src="images/task6-cube2.png" width="100%" />
 						<p>
-							Cube Loop Subdivision 2
+							<code>dae/teapot.dae</code> loop subdivision step 1
 						</p>
 				    	</div>
 				</div>
@@ -369,13 +381,13 @@
 				    	<div style="flex: 1; margin-right: 10px; text-align: center;">
 				        	<img src="images/task6-cube3.png" width="100%" />
 						<p>
-							Cube Loop Subdivision 3
+							<code>dae/teapot.dae</code> loop subdivision step 2
 						</p>
 				    	</div>
 				    	<div style="flex: 1; margin-left: 10px; text-align: center;">
 				        	<img src="images/task6-cube4.png" width="100%" />
 						<p>
-							Cube Loop Subdivision 4
+							<code>dae/teapot.dae</code> loop subdivision step 3
 						</p>
 				   	 </div>
 				</div>
@@ -387,37 +399,131 @@
 				    	<div style="flex: 1; margin-right: 10px; text-align: center;">
 				        	<img src="images/task6-cube5.png" width="100%" />
 						<p>
-							Cube Loop Subdivision 5
+							<code>dae/teapot.dae</code> loop subdivision step 4
 						</p>
 				    	</div>
 				    	<div style="flex: 1; margin-left: 10px; text-align: center;">
 				        	<img src="images/task6-cube6.png" width="100%" />
 						<p>
-							Cube Loop Subdivision 6
+							<code>dae/teapot.dae</code> loop subdivision step 5
 						</p>
 				   	 </div>
 				</div>
 
 				<p>
-					As we can see, the cube becomes slightly asymmetric after repeated subdivisions. This could be because splitting and flipping the edges on the side of the cube have different results from splitting and flipping the edges that lay on the surface of the cube. For the cube specifically, it ends up being asymmetric because the faces of the cube only have one diagonal, instead of a symmetric two diagonals. As a result, when we pre-process the splitting and flipping of edges, we can control which ones we do so that only the ones that keep the symmetry of the cube are edited. 
+					As we can see, the cube becomes slightly asymmetric after repeated subdivisions. This could be because splitting and flipping the edges on the side of the cube have different results from splitting and flipping the edges that lay on the surface of the cube. For the cube specifically, it ends up being asymmetric because the faces of the cube only have one diagonal, instead of a symmetric two diagonals. This causes subdivisions to pull more in one direction than the other.
 				</p>
 
 				<p>
-					Here are screenshots of loop subdivision on the cube, but with edges pre-processed before the loop subdivision. In this case, we are splitting the edges on the faces of the cube before performing loop subdivision on the whole cube.
+					We attempted to reduce this by pre-splitting some edges. Below are some images of upsampling with pre-split edges which still shows that the sharpness remains despite the image smoothening out.
 				</p>
 
 				<div style="display: flex; justify-content: space-between;">
 					
 				    	<div style="flex: 1; margin-right: 10px; text-align: center;">
-				        	<img src="images/task6-preprocess-cube1.png" width="100%" />
+				        	<img src="images/task6-presplit.png" width="100%" />
 						<p>
-							Preprocessed Loop Subdivision 1
+							<code>dae/teapot.dae</code> with pre-split edges
 						</p>
 				    	</div>
 				    	<div style="flex: 1; margin-left: 10px; text-align: center;">
-				        	<img src="images/task6-preprocess-cube2.png" width="100%" />
+				        	<img src="images/task6-presplit-step1.png" width="100%" />
 						<p>
-							Preprocessed Loop Subdivision 2
+							<code>dae/teapot.dae</code> loop subdivision step 1
+						</p>
+				   	 </div>
+				</div>
+
+				<br><br>
+
+				<div style="display: flex; justify-content: space-between;">
+					
+				    	<div style="flex: 1; margin-right: 10px; text-align: center;">
+				        	<img src="images/task6-presplit-step2.png" width="100%" />
+						<p>
+							<code>dae/teapot.dae</code> loop subdivision step 2
+						</p>
+				    	</div>
+				    	<div style="flex: 1; margin-left: 10px; text-align: center;">
+				        	<img src="images/task6-presplit-step3.png" width="100%" />
+						<p>
+							<code>dae/teapot.dae</code> loop subdivision step 3
+						</p>
+				   	 </div>
+				</div>
+
+				<p>
+					As a result, when we pre-process the splitting and flipping of edges, we can control which ones we do so that only the ones that keep the symmetry of the cube are edited. Here are screenshots of loop subdivision on the cube, but with edges pre-processed before the loop subdivision. In this case, we are splitting the edges on the faces of the cube before performing loop subdivision on the whole cube.
+				</p>
+
+				<div style="display: flex; justify-content: space-between;">
+					
+				    	<div style="flex: 1; margin-right: 10px; text-align: center;">
+				        	<img src="images/task6-symmetric-subdivision-preprocessed.png" width="100%" />
+						<p>
+							<code>dae/teapot.dae</code> pre-processed with one split on each face
+						</p>
+				    	</div>
+				    	<div style="flex: 1; margin-left: 10px; text-align: center;">
+				        	<img src="images/task6-symmetric-step1.png" width="100%" />
+						<p>
+							<code>dae/teapot.dae</code> loop subdivision step 1 after pre-processing
+						</p>
+				   	 </div>
+				</div>
+
+				<br><br>
+
+				<div style="display: flex; justify-content: space-between;">
+					
+				    	<div style="flex: 1; margin-right: 10px; text-align: center;">
+				        	<img src="images/task6-symmetric-step2.png" width="100%" />
+						<p>
+							<code>dae/teapot.dae</code> loop subdivision step 2 after pre-processing
+						</p>
+				    	</div>
+				    	<div style="flex: 1; margin-left: 10px; text-align: center;">
+				        	<img src="images/task6-symmetric-step3.png" width="100%" />
+						<p>
+							<code>dae/teapot.dae</code> loop subdivision step 3 after pre-processing
+						</p>
+				   	 </div>
+				</div>
+
+				<br><br>
+
+				<div style="display: flex; justify-content: space-between;">
+					
+				    	<div style="flex: 1; margin-right: 10px; text-align: center;">
+				        	<img src="images/task6-symmetric-step4.png" width="100%" />
+						<p>
+							<code>dae/teapot.dae</code> loop subdivision step 4 after pre-processing
+						</p>
+				    	</div>
+				    	<div style="flex: 1; margin-left: 10px; text-align: center;">
+				        	<img src="images/task6-symmetric-step5.png" width="100%" />
+						<p>
+							<code>dae/teapot.dae</code> loop subdivision step 5 after pre-processing
+						</p>
+				   	 </div>
+				</div>
+
+				<p>
+					The difference in asymmetry is shown when comparing <code>dae/teapot.dae</code> images with no pre-processing and with pre-processing. The one on the left has weird bumps from the corners of the cube whereas the one on the right is more symmetrical and smooth.
+				</p>
+
+				<div style="display: flex; justify-content: space-between;">
+					
+				    	<div style="flex: 1; margin-right: 10px; text-align: center;">
+				        	<img src="images/task6-nopreprocessing-step5.png" width="100%" />
+						<p>
+							<code>dae/teapot.dae</code> loop subdivision step 5, no pre-processing
+						</p>
+				    	</div>
+				    	<div style="flex: 1; margin-left: 10px; text-align: center;">
+				        	<img src="images/task6-symmetric-step5.png" width="100%" />
+						<p>
+							<code>dae/teapot.dae</code> loop subdivision step 5, after pre-processing
 						</p>
 				   	 </div>
 				</div>
