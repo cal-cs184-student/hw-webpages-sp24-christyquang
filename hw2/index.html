@@ -240,8 +240,6 @@
 				   	 </div>
 				</div>
 
-				<br><br>
-
 				<p>
 					There are some cases where this is ideal, but others where we'd want to keep the sharpness of corners and edges while still performing subdivision. In these cases, we could potentially pre-split some edges, specifically those that aren't edges and corners. We could potentially calculate whether something is an edge or corner by looking at the angle of two connecting faces, or have another flag that marks this information.
 				</p>
@@ -300,8 +298,6 @@
 						</p>
 				   	 </div>
 				</div>
-
-				<br><br>
 
 				<p>
 					As we can see, the cube becomes slightly asymmetric after repeated subdivisions. This could be because splitting and flipping the edges on the side of the cube have different results from splitting and flipping the edges that lay on the surface of the cube. For the cube specifically, it ends up being asymmetric because the faces of the cube only have one diagonal, instead of a symmetric two diagonals. As a result, when we pre-process the splitting and flipping of edges, we can control which ones we do so that only the ones that keep the symmetry of the cube are edited. 
