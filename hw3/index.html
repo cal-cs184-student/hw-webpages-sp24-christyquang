@@ -201,6 +201,10 @@
 			</p>
 
 			<p>
+				We chose to use the mean position as the split point instead of the median because we would have to sort the primitives along each axis first. Adding the sort step in the recursion increases the time for generating the BVH. Additionally, a general ray-tracer should work well without prior information about the 3D distribution of primitives so we can assume that for an arbitrary scene, the probability of finding a primitive at any point 3D space follows a uniform distribution so the mean centroild location and median centroid location across the axes are approximately equal.
+			</p>
+
+			<p>
 				`left_primitives` and `right_primitives` are used to store primitives on the left and right sides of the split axis which are then redistributed into the left and right vectors based on their centroid positions along the split axis. Within the loop, if the index `i` is less than the size of the `left_primitives` vector, it means there are still primitives left to be assigned to the left child node. If `i` exceeds the size of the `left_primitives` vector, it means all left primitives have been assigned, and the remaining primitives need to be assigned to the right child node. 
 			</p>
 
@@ -264,7 +268,103 @@
 
 		<h3 align="middle">Task 3: Intersecting the BVH</h3>
 		<hr>
-			
+			<p>
+				The following times were collected by calling `./pathtracer -t 8 -r 800 600 -f {filename}.png ../dae/{path to file}.dae` with and without BVH acceleration.
+			</p>
+
+			<table>
+				  <tr>
+					    <th>File</th>
+					    <th>Without BVH Acceleration</th>
+					    <th>With BVH Acceleration</th>
+				  </tr>
+				  <tr>
+					    <td>../dae/sky/dragon.dae</td>
+					    <td>114.1280 seconds</td>
+					    <td>0.027 seconds</td>
+				  </tr>
+				  <tr>
+					    <td>../dae/sky/CBbunny.dae</td>
+					    <td>31.9542 seconds</td>
+					    <td>0.0211 seconds</td>
+				  </tr>
+				  <tr>
+					    <td>../dae/sky/CBlucy.dae</td>
+					    <td>50.7390 seconds</td>
+					    <td>0.0490 seconds</td>
+				  </tr>
+				  <tr>
+					    <td>../dae/meshedit/maxplanck.dae</td>
+					    <td>144.7978 seconds</td>
+					    <td>0.0375 seconds</td>
+				  </tr>
+			</table>
+
+			<table>
+				  <tr>
+					    <th>File</th>
+					    <th>Intersection Tests Per Ray (Without BVH)</th>
+					    <th>Intersection Tests Per Ray (With BVH)</th>
+				  </tr>
+				  <tr>
+					    <td>../dae/sky/dragon.dae</td>
+					    <td>26331.172812 tests per ray</td>
+					    <td>13.020385 tests per ray</td>
+				  </tr>
+				  <tr>
+					    <td>../dae/sky/CBbunny.dae</td>
+					    <td>5180.986541 tests per ray</td>
+					    <td>14.620026 tests per ray</td>
+				  </tr>
+				  <tr>
+					    <td>../dae/sky/CBlucy.dae</td>
+					    <td>67920.405738 tests per ray</td>
+					    <td>10.578069 tests per ray</td>
+				  </tr>
+				  <tr>
+					    <td>../dae/meshedit/maxplanck.dae</td>
+					    <td>9767.330203 tests per ray</td>
+					    <td>13.643585 tests per ray</td>
+				  </tr>
+			</table>
+
+			<p>
+				With BVH acceleration, the computational efficiency is significant. For example, the `../dae/sky/dragon.dae` rendering completed after `0.027` seconds with BVH acceleration while it took `114.1280` seconds without BVH acceleration. Resepectively, there were `26.331.172812` intersection tests per ray without BVH acceleration and `13.020385` intersection tests per ray with BVH aceleration showcasing how without using BVH acceleration, the average number of intersection tests per ray is `O(n)` and with BVH acceleration is `O(log n)` where `n` is the number of primitives in the scene.
+			</p>
+
+			<div style="display: flex; justify-content: space-between;">
+					
+				    	<div style="flex: 1; margin-right: 10px; text-align: center;">
+				        	<img src="images/maxplanck-2.3.png" width="100%" />
+						<p>
+							maxplanck-2.3.png
+						</p>
+				    	</div>
+				    	<div style="flex: 1; margin-left: 10px; text-align: center;">
+				        	<img src="images/cbbunny.dae-2.3.png" width="100%" />
+						<p>
+							cbbunny.dae-2.3.png
+						</p>
+				   	 </div>
+				</div>
+
+				<br><br>
+
+				<div style="display: flex; justify-content: space-between;">
+					
+				    	<div style="flex: 1; margin-right: 10px; text-align: center;">
+				        	<img src="images/cblucy.dae-2.3.png" width="100%" />
+						<p>
+							cblucy.dae-2.3.png
+						</p>
+				    	</div>
+				    	<div style="flex: 1; margin-left: 10px; text-align: center;">
+				        	<img src="images/dragon.dae-2.3.png" width="100%" />
+						<p>
+							dragon.dae-2.3.png
+						</p>
+				   	 </div>
+				</div>
 		<hr>
 
 		<h2 align="middle">Part 3: Direct Illumination</h2>
