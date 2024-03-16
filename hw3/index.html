@@ -24,7 +24,7 @@
 			    text-align: left;
 			  }
 			  th {
-			    background-color: #f2f2f2;
+			    background-color: #ECF8F7;
 			  }
 		</style>
 		<title>CS 184 Project 3: Pathtracer</title>
@@ -54,36 +54,36 @@
 		<h3 align="middle">Task 1: Generating Camera Rays</h3>
 		<hr>
 			<p>
-				When generating camera rays, we need to transform the image coordinates `(x, y)` to camera space by interpolation. In the camera space, the camera is positioned at `(0, 0, 0)` and looks along its `-Z` axis. There is an axis-aligned rectangular virtual camera sensor that lies on the `Z = -1` plane which is why we need to use `hFov` and `vFov` field of view angles along the `X` and `Y` axis to transform into camera space. For normalized image coordinates, `(0, 0)` is the camera origin so we needed to first shift the normalized `x` and `y` coordinates to align the `Z` axis and rescale the normalized coordinates. 
+				When generating camera rays, we need to transform the image coordinates <code>(x, y)</code> to camera space by interpolation. In the camera space, the camera is positioned at <code>(0, 0, 0)</code> and looks along its <code>-Z</code> axis. There is an axis-aligned rectangular virtual camera sensor that lies on the <code>Z = -1</code> plane which is why we need to use <code>hFov</code> and <code>vFov</code> field of view angles along the `<code>X</code> and <code>Y</code> axis to transform into camera space. For normalized image coordinates, <code>(0, 0)</code> is the camera origin so we needed to first shift the normalized <code>x</code> and <code>y</code> coordinates to align the <code>Z</code> axis and rescale the normalized coordinates. 
 			</p>
 
 			<p>
-				Now, in 3-dimensional camera coordinations, we have the vector `direction` containing `x`, `y`, and `-1`. This is the ray direction vector which is used to transform the camera space ray to world space using the camera-to-world rotation matrix, `c2w` (a 4x4 homogeneous coordinate system transform matrix). Afterwards, we need to normalize `d`. For the defined ray, the camera is placed at `pos` (camera position in world space) which is utilized as column 4 and to set the range for the clipping planes, we initialized `min_t` and `max_t` of the `Ray` with `nclip` and `fclip` respectively.
+				Now, in 3-dimensional camera coordinations, we have the vector <code>direction</code> containing <code>x</code>, <code>y</code>, and <code>-1</code>. This is the ray direction vector which is used to transform the camera space ray to world space using the camera-to-world rotation matrix, <code></code>c2w (a 4x4 homogeneous coordinate system transform matrix). Afterwards, we need to normalize <code>d</code>. For the defined ray, the camera is placed at <code>pos</code> (camera position in world space) which is utilized as column 4 and to set the range for the clipping planes, we initialized <code>min_t</code> and <code>max_t</code> of the <code>Ray</code> with <code>nclip</code> and <code>fclip</code> respectively.
 			</p>
 		<hr>
 
 		<h3 align="middle">Task 2: Generating Pixel Samples</h3>
 		<hr>
 			<p>
-				After creating the camera rays in world space, we generate pixel samples by first generating `ns_aa` random samples within the pixel. While iterating through all of the pixel samples, we obtain a random sample and normalize the coordinates. Then, we call `camera->generate_ray`, passing in the normalized `(x, y)` coordinates, and then call `est_radiance_global_illumination` to estimate the radiance. After all the samples are processed, we averaged out the pixel color with `vec_sum = vec_sum/num_samples` and update the `sampleBuffer` by calling `update_pixel` with that color.
+				After creating the camera rays in world space, we generate pixel samples by first generating <code>ns_aa</code> random samples within the pixel. While iterating through all of the pixel samples, we obtain a random sample and normalize the coordinates. Then, we call <code>camera->generate_ray</code>, passing in the normalized <code>(x, y)</code> coordinates, and then call <code>est_radiance_global_illumination</code> to estimate the radiance. After all the samples are processed, we averaged out the pixel color with <code>vec_sum = vec_sum/num_samples</code> and update the <code>sampleBuffer</code> by calling <code>update_pixel</code> with that color.
 			</p>
 		<hr>
 
 		<h3 align="middle">Task 3: Ray-Triangle Intersection</h3>
 		<hr>
 			<p>
-				To implement ray-triangle intersection, we used Möller-Trumbore intersection algorithm derived from lecture. The `Triangle::has_intersection` method allows us to test whether there is an intersection between a triangle and the input ray. The bulk of this algorithm lies within the intersection algorithm used where these parameters are computed using the Möller–Trumbore algorithm and determine if and where the ray intersects with the plane of the triangle, and then checks if the intersection point lies within the triangle itself.
+				To implement ray-triangle intersection, we used Möller-Trumbore intersection algorithm derived from lecture. The <code>Triangle::has_intersection</code> method allows us to test whether there is an intersection between a triangle and the input ray. The bulk of this algorithm lies within the intersection algorithm used where these parameters are computed using the Möller–Trumbore algorithm and determine if and where the ray intersects with the plane of the triangle, and then checks if the intersection point lies within the triangle itself.
 			</p>
 
 			<ul>
 				<li>
-					`test_vec.x` contains the parameter `t` of the ray equation where the intersection occurs
+					<code>test_vec.x</code> contains the parameter <code>t</code> of the ray equation where the intersection occurs
 				</li>
 				<li>
-					`test_vec.y` contains the parameter `b1`, which represents the barycentric coordinate of the intersection point with respect to the triangle's vertices
+					<code>test_vec.y</code> contains the parameter <code>b1</code>, which represents the barycentric coordinate of the intersection point with respect to the triangle's vertices
 				</li>
 				<li>
-					`test_vec.z` contains the parameter `b2`, another barycentric coordinate
+					<code>test_vec.z</code> contains the parameter <code>b2</code>, another barycentric coordinate
 				</li>
 			</ul>
 
@@ -93,32 +93,32 @@
 
 			<ul>
 				<li>
-					If any of the barycentric coordinates `(b1, b2)` are less than `0` or their sum is greater than `1`, it means the intersection point lies outside the triangle so the function returns false
+					If any of the barycentric coordinates <code>(b1, b2)</code> are less than <code>0</code> or their sum is greater than <code>1</code>, it means the intersection point lies outside the triangle so the function returns false
 				</li>
 				<li>
-					If the parameter t is outside the valid range `[r.min_t, r.max_t]`, the intersection point is not within the segment of the ray being considered so the function returns false
+					If the parameter <code>t</code> is outside the valid range <code>[r.min_t, r.max_t]</code>, the intersection point is not within the segment of the ray being considered so the function returns false
 				</li>
 				<li>
-					Otherwise, `r.max_t` is updated to `t` to limit the maximum intersection distance of the ray and returns true, indicating an intersection has been found
+					Otherwise, <code>r.max_t</code> is updated to <code>t</code> to limit the maximum intersection distance of the ray and returns true, indicating an intersection has been found
 				</li>
 			</ul>
 
 			<p>
-				If an intersection is found, the function updates the intersection data (`isect`) with relevant information:
+				If an intersection is found, the function updates the intersection data (<code>isect</code>) with relevant information:
 			</p>
 
 			<ul>
 				<li>
-					`t`: the parameter `t` of the ray equation where the intersection occurs
+					<code>t</code>: the parameter <code>t</code> of the ray equation where the intersection occurs
 				</li>
 				<li>
-					`n`: the surface normal at the intersection point calculated as the weighted sum of the triangle's vertex normals (`n1`, `n2`, `n3`) based on the barycentric coordinates
+					<code>n</code>: the surface normal at the intersection point calculated as the weighted sum of the triangle's vertex normals (<code>n1</code>, <code>n2</code>, <code>n3</code>) based on the barycentric coordinates
 				</li>
 				<li>
-					`primitive`: a pointer to the triangle primitive that was intersected
+					<code>primitive</code>: a pointer to the triangle primitive that was intersected
 				</li>
 				<li>
-					`bsdf`: a pointer to the surface material (`BSDF`) at the hit point
+					<code>bsdf</code>: a pointer to the surface material (<code>BSDF</code>) at the hit point
 				</li>
 			</ul>
 
@@ -135,65 +135,65 @@
 		<h3 align="middle">Task 4: Ray-Sphere Intersection</h3>
 		<hr>
 			<p>
-				Ray-sphere intersection was similar since it incorporates the Möller-Trumbore intersection algorithm but a bit more involved than ray-triangle intersection. There is a new `test` method which returns `true` if there are intersections and writes the smaller of the two intersection times in `t1` and the larger in `t2`. Within these methods, we reduce the intersection points to the roots of a quadratic equation and the discriminant is used to determine the number of intersections. 
+				Ray-sphere intersection was similar since it incorporates the Möller-Trumbore intersection algorithm but a bit more involved than ray-triangle intersection. There is a new <code>test</code> method which returns true if there are intersections and writes the smaller of the two intersection times in <code>t1</code> and the larger in <code>t2</code>. Within these methods, we reduce the intersection points to the roots of a quadratic equation and the discriminant is used to determine the number of intersections. 
 			</p>
 
 			<ul>
 				<li>
-					`a`: represents the squared magnitude of the ray direction (`r.d`)
+					<code>a</code>: represents the squared magnitude of the ray direction (<code>r.d</code>)
 				</li>
 				<li>
-					`b`: represents the dot product between the ray direction and the vector from the ray origin to the sphere center
+					<code>b</code>: represents the dot product between the ray direction and the vector from the ray origin to the sphere center
 				</li>
 				<li>
-					`c`: represents the squared magnitude of the vector from the ray origin to the sphere center minus the squared radius of the sphere
+					<code>c</code>: represents the squared magnitude of the vector from the ray origin to the sphere center minus the squared radius of the sphere
 				</li>
 				<li>
-					`t_plus`, `t_minus`: variables to store the potential intersection times calculated using the quadratic formula
+					<code>t_plus</code>, <code>t_minus</code>: variables to store the potential intersection times calculated using the quadratic formula
 				</li>
 			</ul>
 
 			<p>
-				As such, if `discriminant` is less than `0`, this means that the ray missed the sphere/doesn't intersection so we return `false`. If `discriminant` is non-negative, this indicates that there is at least one real root so we used the quadratic formula to determine the time of intersection and assign `t_plus` and `t_minus`. The function compares `t_plus` and `t_minus` to determine which one is smaller and larger in order to assign the smaller intersection time to `t1` and the larger one to `t2`.
+				As such, if <code>discriminant</code> is less than <code>0</code>, this means that the ray missed the sphere/doesn't intersection so we return false. If <code>discriminant</code> is non-negative, this indicates that there is at least one real root so we used the quadratic formula to determine the time of intersection and assign <code>t_plus</code> and <code>t_minus</code>. The function compares <code>t_plus</code> and <code>t_minus</code> to determine which one is smaller and larger in order to assign the smaller intersection time to <code>t1</code> and the larger one to <code>t2</code>.
 			</p>
 
 			<p>
-				If an intersection is found within the valid range `[r.min_t, r.max_t]` and `t1` is adequately updated using the `test` helper method, `has_intersection` updates `r.max_t` to the intersection time `t1` (the smaller of the two intersection times) and returns `true`. In `intersection`, we do the same in addition to populating `i` (`Intersection` object) as stated in the spec (`t`, `primitive`, `bsdf`) and the surface normal.
+				If an intersection is found within the valid range <code>[r.min_t, r.max_t]</code> and <code>t1</code> is adequately updated using the <code>test</code> helper method, <code>has_intersection</code> updates <code>r.max_t</code> to the intersection time <code>t1</code> (the smaller of the two intersection times) and returns true. In <code>intersection</code>, we do the same in addition to populating <code>i</code> (<code>Intersection</code> object) as stated in the spec (<code>t</code>, <code>primitive</code>, <code>bsdf</code>) and the surface normal.
 			</p>
 
 			<div style="display: flex; justify-content: space-between;">
 					
-				    	<div style="flex: 1; margin-right: 10px; text-align: center;">
-				        	<img src="images/1.4.png" width="100%" />
-						<p>
-							CBspheres_lambertian.dae 1.4
-						</p>
-				    	</div>
-				    	<div style="flex: 1; margin-left: 10px; text-align: center;">
-				        	<img src="images/bench-normal-shading.png" width="100%" />
-						<p>
-							bench normal shading 1.4
-						</p>
-				   	 </div>
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/1.4.png" width="100%" />
+					<p>
+						<code>CBspheres_lambertian.dae</code> 1.4
+					</p>
 				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/bench-normal-shading.png" width="100%" />
+					<p>
+						bench normal shading 1.4
+					</p>
+				 </div>
+			</div>
 
-				<br><br>
+			<br><br>
 
-				<div style="display: flex; justify-content: space-between;">
+			<div style="display: flex; justify-content: space-between;">
 					
-				    	<div style="flex: 1; margin-right: 10px; text-align: center;">
-				        	<img src="images/cbdragon-normal-shading.png" width="100%" />
-						<p>
-							cbdragon normal shading 1.4
-						</p>
-				    	</div>
-				    	<div style="flex: 1; margin-left: 10px; text-align: center;">
-				        	<img src="images/coil-normal-shading.png" width="100%" />
-						<p>
-							coil normal shading 1.4
-						</p>
-				   	 </div>
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/cbdragon-normal-shading.png" width="100%" />
+					<p>
+						cbdragon normal shading 1.4
+					</p>
 				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/coil-normal-shading.png" width="100%" />
+					<p>
+						coil normal shading 1.4
+					</p>
+				 </div>
+			</div>
 		<hr>
 
 		<h2 align="middle">Part 2: Bounding Volume Hierarchy</h2>
@@ -201,15 +201,15 @@
 		<h3 align="middle">Task 1: Constructing the BVH</h3>
 		<hr>
 			<p>
-				In `BVHAccel::construct_bvh`, we first generate the outermost bounding box that encloses all the primitives in the given range (`start` to `end`). We iterate through all the primitives passed in the range and expand the bounding box to include each primitive's bounding box. 
+				In <code>BVHAccel::construct_bvh</code>, we first generate the outermost bounding box that encloses all the primitives in the given range (<code>start</code> to <code>end</code>). We iterate through all the primitives passed in the range and expand the bounding box to include each primitive's bounding box. 
 			</p>
 
 			<p>
-				We create a new BVHNode if the number of primitives (`num_prim`) is less than or equal to the `max_leaf_size` and initialize its start and end to be the start and end of the primitives.
+				We create a new BVHNode if the number of primitives (<code>num_prim</code>) is less than or equal to the <code>max_leaf_size</code> and initialize its start and end to be the start and end of the primitives.
 			</p>
 
 			<p>
-				If not, we need to recurse and determine the split point and axis selection to split up the bounding volume hierarchy. First, we computed the average centroid across all the primitives' bounding boxes within the node. This centroid is used to determine the split axis for partitioning the primitives. The split axis is chosen as the axis that results in the smallest bounding box heuristic among the three axes (`X`, `Y`, `Z`). The bounding box heuristic is calculated based on the surface area of the child bounding boxes after splitting and the primitives are partitioned into left and right child nodes based on the chosen split axis and the average centroid.
+				If not, we need to recurse and determine the split point and axis selection to split up the bounding volume hierarchy. First, we computed the average centroid across all the primitives' bounding boxes within the node. This centroid is used to determine the split axis for partitioning the primitives. The split axis is chosen as the axis that results in the smallest bounding box heuristic among the three axes (<code>X</code>, <code>Y</code>, <code>Z</code>). The bounding box heuristic is calculated based on the surface area of the child bounding boxes after splitting and the primitives are partitioned into left and right child nodes based on the chosen split axis and the average centroid.
 			</p>
 
 			<p>
@@ -217,11 +217,11 @@
 			</p>
 
 			<p>
-				`left_primitives` and `right_primitives` are used to store primitives on the left and right sides of the split axis which are then redistributed into the left and right vectors based on their centroid positions along the split axis. Within the loop, if the index `i` is less than the size of the `left_primitives` vector, it means there are still primitives left to be assigned to the left child node. If `i` exceeds the size of the `left_primitives` vector, it means all left primitives have been assigned, and the remaining primitives need to be assigned to the right child node. 
+				<code>left_primitives</code> and <code>right_primitives</code> are used to store primitives on the left and right sides of the split axis which are then redistributed into the left and right vectors based on their centroid positions along the split axis. Within the loop, if the index <code>i</code> is less than the size of the <code>left_primitives</code> vector, it means there are still primitives left to be assigned to the left child node. If <code>i</code> exceeds the size of the <code>left_primitives</code> vector, it means all left primitives have been assigned, and the remaining primitives need to be assigned to the right child node. 
 			</p>
 
 			<p>
-				Recursive calls to `construct_bvh` are made to construct the left and right child nodes. For the left child node, the range of primitives is from `start` to the iterator `center_left` and for the right child node, the range is from `center_left` to `end`.
+				Recursive calls to <code>construct_bvh</code> are made to construct the left and right child nodes. For the left child node, the range of primitives is from <code>start</code> to the iterator <code>center_left</code> and for the right child node, the range is from <code>center_left</code> to <code>end</code>.
 			</p>
 
 			<p>
@@ -230,58 +230,58 @@
 
 			<div style="display: flex; justify-content: space-between;">
 					
-				    	<div style="flex: 1; margin-right: 10px; text-align: center;">
-				        	<img src="images/2.1-base-rendering.png" width="100%" />
-						<p>
-							2.1-base-rendering.png
-						</p>
-				    	</div>
-				    	<div style="flex: 1; margin-left: 10px; text-align: center;">
-				        	<img src="images/2.1-desc-1.png" width="100%" />
-						<p>
-							2.1-desc-1.png
-						</p>
-				   	 </div>
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/2.1-base-rendering.png" width="100%" />
+					<p>
+						<code>2.1-base-rendering.png</code>
+					</p>
 				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/2.1-desc-1.png" width="100%" />
+					<p>
+						<code>2.1-desc-1.png</code>
+					</p>
+				 </div>
+			</div>
 
-				<br><br>
+			<br><br>
 
-				<div style="display: flex; justify-content: space-between;">
+			<div style="display: flex; justify-content: space-between;">
 					
-				    	<div style="flex: 1; margin-right: 10px; text-align: center;">
-				        	<img src="images/2.1-desc-2.png" width="100%" />
-						<p>
-							2.1-desc-2.png
-						</p>
-				    	</div>
-				    	<div style="flex: 1; margin-left: 10px; text-align: center;">
-				        	<img src="images/2.1-desc-3.png" width="100%" />
-						<p>
-							2.1-desc-3.png
-						</p>
-				   	 </div>
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/2.1-desc-2.png" width="100%" />
+					<p>
+						<code>2.1-desc-2.png</code>
+					</p>
 				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/2.1-desc-3.png" width="100%" />
+					<p>
+						<code>2.1-desc-3.png</code>
+					</p>
+				 </div>
+			</div>
 		<hr>
 
 		<h3 align="middle">Task 2: Intersecting the Bounding Box</h3>
 		<hr>
 			<p>
-				Implementing `BBox::intersect` utilizes the given ray and axis-aligned plane intersection and ray and axis-aligned box intersection equations to check whether a ray intersects a given bounding box.
+				Implementing <code>BBox::intersect</code> utilizes the given ray and axis-aligned plane intersection and ray and axis-aligned box intersection equations to check whether a ray intersects a given bounding box.
 			</p>
 
 			<p>
-				Time is represented as `t = (p_x' - o_x) / d_x` when perpendicular to the x axis. Intersection times (`t`) are calculated for each axis using the parametric equation of a ray, where `t = (p[axis] - o[axis]) / d[axis]`. This equation represents the intersection of the ray with each of the bounding box's six planes along the `X`, `Y`, and `Z` axes. The minimum and maximum intersection times (`min_t` and `max_t`) are calculated for each axis which represent the entry and exit points of the ray into and out of the bounding box along each axis. Specifically, the interval of intersection is determined by taking the maximum of the minimum intersection times (`min_t`) across all axes and the minimum of the maximum intersection times (`max_t`) across all axes, ensuring that the intersection interval is as tight as possible.
+				Time is represented as $t = \frac{{p_x' - o_x}}{{d_x}}$ when perpendicular to the x axis. Intersection times (<code>t</code>) are calculated for each axis using the parametric equation of a ray, where $t = \frac{{p[axis] - o[axis]}}{{d[axis}}$. This equation represents the intersection of the ray with each of the bounding box's six planes along the <code>X</code>, <code>Y</code>, and <code>Z</code> axes. The minimum and maximum intersection times (<code>min_t</code> and <code>max_t</code>) are calculated for each axis which represent the entry and exit points of the ray into and out of the bounding box along each axis. Specifically, the interval of intersection is determined by taking the maximum of the minimum intersection times (<code>min_t</code>) across all axes and the minimum of the maximum intersection times (<code>max_t</code>) across all axes, ensuring that the intersection interval is as tight as possible.
 			</p>
 
 			<p>
-				If the max of `min_t` is greater than the min of `max_t`, it indicates that the ray misses the bounding box along at least one axis which is why we return `false` (no intersection). Otherwise, `t0` and `t1` are updated directly if an intersection is found within the provided range and we return `true`. 
+				If the max of <code>min_t</code> is greater than the min of <code>max_t</code>, it indicates that the ray misses the bounding box along at least one axis which is why we return false (no intersection). Otherwise, <code>t0</code> and <code>t1</code> are updated directly if an intersection is found within the provided range and we return true. 
 			</p>
 		<hr>
 
 		<h3 align="middle">Task 3: Intersecting the BVH</h3>
 		<hr>
 			<p>
-				The following times were collected by calling `./pathtracer -t 8 -r 800 600 -f {filename}.png ../dae/{path to file}.dae` with and without BVH acceleration.
+				The following times were collected by calling <code>./pathtracer -t 8 -r 800 600 -f {filename}.png ../dae/{path to file}.dae</code> with and without BVH acceleration.
 			</p>
 
 			<table>
@@ -291,26 +291,28 @@
 					    <th>With BVH Acceleration</th>
 				  </tr>
 				  <tr>
-					    <td>../dae/sky/dragon.dae</td>
+					    <td><code>../dae/sky/dragon.dae</code></td>
 					    <td>114.1280 seconds</td>
 					    <td>0.027 seconds</td>
 				  </tr>
 				  <tr>
-					    <td>../dae/sky/CBbunny.dae</td>
+					    <td><code>../dae/sky/CBbunny.dae</code></td>
 					    <td>31.9542 seconds</td>
 					    <td>0.0211 seconds</td>
 				  </tr>
 				  <tr>
-					    <td>../dae/sky/CBlucy.dae</td>
+					    <td><code>../dae/sky/CBlucy.dae</code></td>
 					    <td>50.7390 seconds</td>
 					    <td>0.0490 seconds</td>
 				  </tr>
 				  <tr>
-					    <td>../dae/meshedit/maxplanck.dae</td>
+					    <td><code>../dae/meshedit/maxplanck.dae</code></td>
 					    <td>144.7978 seconds</td>
 					    <td>0.0375 seconds</td>
 				  </tr>
 			</table>
+
+			<br><br>
 
 			<table>
 				  <tr>
@@ -319,64 +321,64 @@
 					    <th>Intersection Tests Per Ray (With BVH)</th>
 				  </tr>
 				  <tr>
-					    <td>../dae/sky/dragon.dae</td>
+					    <td><code>../dae/sky/dragon.dae</code></td>
 					    <td>26331.172812 tests per ray</td>
 					    <td>13.020385 tests per ray</td>
 				  </tr>
 				  <tr>
-					    <td>../dae/sky/CBbunny.dae</td>
+					    <td><code>../dae/sky/CBbunny.dae</code></td>
 					    <td>5180.986541 tests per ray</td>
 					    <td>14.620026 tests per ray</td>
 				  </tr>
 				  <tr>
-					    <td>../dae/sky/CBlucy.dae</td>
+					    <td><code>../dae/sky/CBlucy.dae</code></td>
 					    <td>67920.405738 tests per ray</td>
 					    <td>10.578069 tests per ray</td>
 				  </tr>
 				  <tr>
-					    <td>../dae/meshedit/maxplanck.dae</td>
+					    <td><code>../dae/meshedit/maxplanck.dae</code></td>
 					    <td>9767.330203 tests per ray</td>
 					    <td>13.643585 tests per ray</td>
 				  </tr>
 			</table>
 
 			<p>
-				With BVH acceleration, the computational efficiency is significant. For example, the `../dae/sky/dragon.dae` rendering completed after `0.027` seconds with BVH acceleration while it took `114.1280` seconds without BVH acceleration. Resepectively, there were `26.331.172812` intersection tests per ray without BVH acceleration and `13.020385` intersection tests per ray with BVH aceleration showcasing how without using BVH acceleration, the average number of intersection tests per ray is `O(n)` and with BVH acceleration is `O(log n)` where `n` is the number of primitives in the scene.
+				With BVH acceleration, the computational efficiency is significant. For example, the <code>../dae/sky/dragon.dae</code> rendering completed after 0.027 seconds with BVH acceleration while it took 114.1280 seconds without BVH acceleration. Resepectively, there were 26.331.172812 intersection tests per ray without BVH acceleration and 13.020385 intersection tests per ray with BVH aceleration showcasing how without using BVH acceleration, the average number of intersection tests per ray is <code>O(n)</code> and with BVH acceleration is <code>O(log n)</code> where <code>n</code> is the number of primitives in the scene.
 			</p>
 
 			<div style="display: flex; justify-content: space-between;">
 					
-				    	<div style="flex: 1; margin-right: 10px; text-align: center;">
-				        	<img src="images/maxplanck-2.3.png" width="100%" />
-						<p>
-							maxplanck-2.3.png
-						</p>
-				    	</div>
-				    	<div style="flex: 1; margin-left: 10px; text-align: center;">
-				        	<img src="images/cbbunny.dae-2.3.png" width="100%" />
-						<p>
-							cbbunny.dae-2.3.png
-						</p>
-				   	 </div>
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/maxplanck-2.3.png" width="100%" />
+					<p>
+						<code>maxplanck-2.3.png</code>
+					</p>
 				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/cbbunny.dae-2.3.png" width="100%" />
+					<p>
+						<code>cbbunny.dae-2.3.png</code>
+					</p>
+				 </div>
+			</div>
 
-				<br><br>
+			<br><br>
 
-				<div style="display: flex; justify-content: space-between;">
+			<div style="display: flex; justify-content: space-between;">
 					
-				    	<div style="flex: 1; margin-right: 10px; text-align: center;">
-				        	<img src="images/cblucy.dae-2.3.png" width="100%" />
-						<p>
-							cblucy.dae-2.3.png
-						</p>
-				    	</div>
-				    	<div style="flex: 1; margin-left: 10px; text-align: center;">
-				        	<img src="images/dragon.dae-2.3.png" width="100%" />
-						<p>
-							dragon.dae-2.3.png
-						</p>
-				   	 </div>
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/cblucy.dae-2.3.png" width="100%" />
+					<p>
+						<code>cblucy.dae-2.3.png</code>
+					</p>
 				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/dragon.dae-2.3.png" width="100%" />
+					<p>
+						<code>dragon.dae-2.3.png</code>
+					</p>
+				 </div>
+			</div>
 		<hr>
 
 		<h2 align="middle">Part 3: Direct Illumination</h2>
@@ -387,14 +389,84 @@
 
 		<h3 align="middle">Task 2: Zero-bounce Illumination</h3>
 		<hr>
+			<div style="text-align: center;">
+				<img src="images/3.2-cornell-box.png" width="750px" />
+				<p>Screenshot of <code>CBempty.dae</code></p>
+			</div>
 		<hr>
 
 		<h3 align="middle">Task 3: Direct Lighting with Uniform Hemisphere Shading</h3>
 		<hr>
+			<div style="display: flex; justify-content: space-between;">
+					
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/CBbunny_H_16_8-3.3.png" width="100%" />
+					<p>
+						<code>CBbunny_H_16_8-3.3.png</code>
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/CBbunny_H_64_32-3.3.png" width="100%" />
+					<p>
+						<code>CBbunny_H_64_32-3.3.png</code>
+					</p>
+				 </div>
+			</div>
+
+			<br><br>
+
+			<div style="display: flex; justify-content: space-between;">
+					
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/CBbunny-sample1.png" width="100%" />
+					<p>
+						<code>CBbunny-sample1.png</code>
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/CBbunny-sample4.png" width="100%" />
+					<p>
+						<code>CBbunny-sample4.png</code>
+					</p>
+				 </div>
+			</div>
+
+			<br><br>
+
+			<div style="display: flex; justify-content: space-between;">
+					
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/CBbunny-sample16.png" width="100%" />
+					<p>
+						<code>CBbunny-sample16.png</code>
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/CBbunny-sample64.png" width="100%" />
+					<p>
+						<code>CBbunny-sample64.png</code>
+					</p>
+				 </div>
+			</div>
 		<hr>
 
 		<h3 align="middle">Task 4: Direct Lighting by Importance Sampling Lights</h3>
 		<hr>
+			<div style="display: flex; justify-content: space-between;">
+					
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/bunny_1_1-3.4.png" width="100%" />
+					<p>
+						<code>bunny_1_1-3.4.png</code>
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/bunny_64_32-3.4.png" width="100%" />
+					<p>
+						<code>bunny_64_32-3.4.png</code>
+					</p>
+				 </div>
+			</div>
 		<hr>
 
 		<h2 align="middle">Part 4: Global Illumination</h2>
