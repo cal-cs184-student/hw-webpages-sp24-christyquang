@@ -385,13 +385,20 @@
 			
 		<h3 align="middle">Task 1: Diffuse BSDF</h3>
 		<hr>
+			<p>
+				<code>DiffuseBSDF::f</code> represents a diffuse material that reflects incoming light equally in all directions on the hemisphere. Originally, we returned the <code>reflectance</code> of the <code>DiffuseBSDF</code> but this didn't match the image in spec. The surface area of a unit hemisphere is <code>2 * PI</code> and based off of lecture slides, the integral of cosine over hemisphere is only <code>1/2</code> the area of the hemisphere, thus why we chose to divide <code>reflectance</code> by <code>PI</code> and resulted in the correct matching image.
+			</p>
 		<hr>
 
 		<h3 align="middle">Task 2: Zero-bounce Illumination</h3>
+		<p>
+			To implement zero-bounce illumination, we obtained the <code>Intersection</code> object's <code>bsdf</code> attribute and called <code>get_emission()</code> to get the emission value of the surface material (light that results from zero bounces of light). Afterwards, we updated <code>est_radiance_global_illumination</code> to utilize this method and generate the following image when running <code>./pathtracer -t 8 -s 16 -l 8 -m 6 -H -f CBbunny_16_8.png -r 480 360 ../dae/sky/CBbunny.dae</code>.
+		</p>
+		
 		<hr>
 			<div style="text-align: center;">
 				<img src="images/3.2-cornell-box.png" width="750px" />
-				<p>Screenshot of <code>CBempty.dae</code></p>
+				<p>Screenshot of <code>CBbunny.dae</code> with zero-bounce illumination</p>
 			</div>
 		<hr>
 
