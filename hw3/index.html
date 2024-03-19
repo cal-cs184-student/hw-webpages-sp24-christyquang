@@ -422,7 +422,7 @@
 			</p>
 
 			<p>
-				Below are images of running `./pathtracer -t 8 -s 16 -l 8 -H -f CBbunny_H_16_8.png -r 480 360 ../dae/sky/CBbunny.dae`, `./pathtracer -t 8 -s 64 -l 32 -m 6 -H -f CBbunny_H_64_32.png -r 480 360 ../dae/sky/CBbunny.dae` and `./pathtracer -t 8 -s 64 -l 32 -m 6 -H -f CBempty.png -r 480 360 ../dae/sky/CBspheres_lambertian.dae` with uniform hemisphere sampling.
+				Below are images of running <code>./pathtracer -t 8 -s 16 -l 8 -H -f CBbunny_H_16_8.png -r 480 360 ../dae/sky/CBbunny.dae</code>, <code>./pathtracer -t 8 -s 64 -l 32 -m 6 -H -f CBbunny_H_64_32.png -r 480 360 ../dae/sky/CBbunny.dae</code> and <code>./pathtracer -t 8 -s 64 -l 32 -m 6 -H -f CBempty.png -r 480 360 ../dae/sky/CBspheres_lambertian.dae</code> with uniform hemisphere sampling.
 			</p>
 		
 			<div style="display: flex; justify-content: space-between;">
@@ -430,52 +430,24 @@
 				<div style="flex: 1; margin-right: 10px; text-align: center;">
 					<img src="images/CBbunny_H_16_8-3.3.png" width="100%" />
 					<p>
-						<code>CBbunny_H_16_8-3.3.png</code>
+						<code>CBbunny_H_16_8.png</code>
 					</p>
 				</div>
 				<div style="flex: 1; margin-left: 10px; text-align: center;">
 					<img src="images/CBbunny_H_64_32-3.3.png" width="100%" />
 					<p>
-						<code>CBbunny_H_64_32-3.3.png</code>
+						<code>CBbunny_H_64_32.png</code>
 					</p>
 				 </div>
 			</div>
 
 			<br><br>
 
-			<div style="display: flex; justify-content: space-between;">
-					
-				<div style="flex: 1; margin-right: 10px; text-align: center;">
-					<img src="images/CBbunny-sample1.png" width="100%" />
-					<p>
-						<code>CBbunny-sample1.png</code>
-					</p>
-				</div>
-				<div style="flex: 1; margin-left: 10px; text-align: center;">
-					<img src="images/CBbunny-sample4.png" width="100%" />
-					<p>
-						<code>CBbunny-sample4.png</code>
-					</p>
-				 </div>
+			<div style="text-align: center;">
+				<img src="images/CBspheres_lambertian-3.3.png" width="750px" />
+				<p>Screenshot of <code>../dae/sky/CBspheres_lambertian.dae</code></p>
 			</div>
 
-			<br><br>
-
-			<div style="display: flex; justify-content: space-between;">
-					
-				<div style="flex: 1; margin-right: 10px; text-align: center;">
-					<img src="images/CBbunny-sample16.png" width="100%" />
-					<p>
-						<code>CBbunny-sample16.png</code>
-					</p>
-				</div>
-				<div style="flex: 1; margin-left: 10px; text-align: center;">
-					<img src="images/CBbunny-sample64.png" width="100%" />
-					<p>
-						<code>CBbunny-sample64.png</code>
-					</p>
-				 </div>
-			</div>
 		<hr>
 
 		<h3 align="middle">Task 4: Direct Lighting by Importance Sampling Lights</h3>
@@ -496,9 +468,66 @@
 				Below are images generated when running <code>./pathtracer -t 8 -s 64 -l 32 -m 6 -f {filename}.png -r 480 360 ../dae/sky/{filename}.dae</code> for importance sampling lights.
 			</p>
 
+			<div style="display: flex; justify-content: space-between;">
+					
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/bunny_64_32-3.4.png" width="100%" />
+					<p>
+						<code>../dae/sky/CBbunny.dae</code>
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/CBbunny-sample4.png" width="100%" />
+					<p>
+						<code>../dae/sky/CBbunny.dae</code>, 4 light rays
+					</p>
+				 </div>
+			</div>
+
+			<br><br>
+
+			<div style="text-align: center;">
+				<img src="images/dragon_64_32-3.4.png" width="750px" />
+				<p>Screenshot of <code>../dae/sky/dragon.dae</code></p>
+			</div>
+		
 			<p>
 				Using light importance sampling, we can also compare the noise levels in soft shadows when rendering with 1, 4, 16, and 64 light rays (the <code>-l</code> flag) and 1 sample per pixel (the <code>-s</code> flag) for <code>../dae/sky/CBbunny.dae</code>. When there are more light rays, we can see that there is less noise in the rendered images. The shadows become more smooth and the edges are less rigid because with less light rays, each shadow point is clearer. With more light rays, there is a greater range, allowing for more variation in the shadows.
 			</p>
+
+			<div style="display: flex; justify-content: space-between;">
+					
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/CBbunny-sample1.png" width="100%" />
+					<p>
+						<code>../dae/sky/CBbunny.dae</code>, 1 light ray
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/CBbunny-sample4.png" width="100%" />
+					<p>
+						<code>../dae/sky/CBbunny.dae</code>, 4 light rays
+					</p>
+				 </div>
+			</div>
+
+			<br><br>
+
+			<div style="display: flex; justify-content: space-between;">
+					
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/CBbunny-sample16.png" width="100%" />
+					<p>
+						<code>../dae/sky/CBbunny.dae</code>, 16 light rays
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/CBbunny-sample64.png" width="100%" />
+					<p>
+						<code>../dae/sky/CBbunny.dae</code>, 64 light rays
+					</p>
+				 </div>
+			</div>
 
 			<p>
 				<u>Uniform Hemisphere Sampling vs Light Sampling</u>
@@ -513,13 +542,13 @@
 				<div style="flex: 1; margin-right: 10px; text-align: center;">
 					<img src="images/bunny_1_1-3.4.png" width="100%" />
 					<p>
-						<code>bunny_1_1-3.4.png</code>
+						<code>../dae/sky/CBbunny.dae</code> with uniform hemisphere sampling
 					</p>
 				</div>
 				<div style="flex: 1; margin-left: 10px; text-align: center;">
 					<img src="images/bunny_64_32-3.4.png" width="100%" />
 					<p>
-						<code>bunny_64_32-3.4.png</code>
+						<code>../dae/sky/CBbunny.dae</code> with direct lighting sampling
 					</p>
 				 </div>
 			</div>
