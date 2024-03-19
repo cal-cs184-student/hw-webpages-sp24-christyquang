@@ -270,7 +270,7 @@
 			</p>
 
 			<p>
-				Time is represented as $$t = \frac{{p_x' - o_x}}{{d_x}}$$ when perpendicular to the x axis. Intersection times (<code>t</code>) are calculated for each axis using the parametric equation of a ray, where \( t = \frac{{p[\text{axis}] - o[\text{axis}]}}{{d[\text{axis}]}} \). This equation represents the intersection of the ray with each of the bounding box's six planes along the <code>X</code>, <code>Y</code>, and <code>Z</code> axes. The minimum and maximum intersection times (<code>min_t</code> and <code>max_t</code>) are calculated for each axis which represent the entry and exit points of the ray into and out of the bounding box along each axis. Specifically, the interval of intersection is determined by taking the maximum of the minimum intersection times (<code>min_t</code>) across all axes and the minimum of the maximum intersection times (<code>max_t</code>) across all axes, ensuring that the intersection interval is as tight as possible.
+				Time is represented as \( t = \frac{{p_x' - o_x}}{{d_x}} \) when perpendicular to the x axis. Intersection times (<code>t</code>) are calculated for each axis using the parametric equation of a ray, where \( t = \frac{{p[\text{axis}] - o[\text{axis}]}}{{d[\text{axis}]}} \). This equation represents the intersection of the ray with each of the bounding box's six planes along the <code>X</code>, <code>Y</code>, and <code>Z</code> axes. The minimum and maximum intersection times (<code>min_t</code> and <code>max_t</code>) are calculated for each axis which represent the entry and exit points of the ray into and out of the bounding box along each axis. Specifically, the interval of intersection is determined by taking the maximum of the minimum intersection times (<code>min_t</code>) across all axes and the minimum of the maximum intersection times (<code>max_t</code>) across all axes, ensuring that the intersection interval is as tight as possible.
 			</p>
 
 			<p>
@@ -343,7 +343,7 @@
 			</table>
 
 			<p>
-				With BVH acceleration, the computational efficiency is significant. For example, the <code>../dae/sky/dragon.dae</code> rendering completed after 0.027 seconds with BVH acceleration while it took 114.1280 seconds without BVH acceleration. Resepectively, there were 26.331.172812 intersection tests per ray without BVH acceleration and 13.020385 intersection tests per ray with BVH aceleration showcasing how without using BVH acceleration, the average number of intersection tests per ray is <code>O(n)</code> and with BVH acceleration is <code>O(log n)</code> where <code>n</code> is the number of primitives in the scene.
+				With BVH acceleration, the computational efficiency is significant. For example, the <code>../dae/sky/dragon.dae</code> rendering completed after 0.027 seconds with BVH acceleration while it took 114.1280 seconds without BVH acceleration. Resepectively, there were 26331.172812 intersection tests per ray without BVH acceleration and 13.020385 intersection tests per ray with BVH aceleration showcasing how without using BVH acceleration, the average number of intersection tests per ray is <code>O(n)</code> and with BVH acceleration is <code>O(log n)</code> where <code>n</code> is the number of primitives in the scene.
 			</p>
 
 			<div style="display: flex; justify-content: space-between;">
@@ -386,7 +386,7 @@
 		<h3 align="middle">Task 1: Diffuse BSDF</h3>
 		<hr>
 			<p>
-				<code>DiffuseBSDF::f</code> represents a diffuse material that reflects incoming light equally in all directions on the hemisphere. Originally, we returned the <code>reflectance</code> of the <code>DiffuseBSDF</code> but this didn't match the image in spec. The surface area of a unit hemisphere is <code>2 * PI</code> and based off of lecture slides, the integral of cosine over hemisphere is only <code>1/2</code> the area of the hemisphere, thus why we chose to divide <code>reflectance</code> by <code>PI</code> and resulted in the correct matching image.
+				<code>DiffuseBSDF::f</code> represents a diffuse material that reflects incoming light equally in all directions on the hemisphere. Originally, we returned the <code>reflectance</code> of the <code>DiffuseBSDF</code> but this didn't match the image in spec. The surface area of a unit hemisphere is <code>\(2 \times \pi\)</code> and based off of lecture slides, the integral of cosine over hemisphere is only <code>1/2</code> the area of the hemisphere, thus why we chose to divide <code>reflectance</code> by <code>\( \pi \)</code> and resulted in the correct matching image.
 			</p>
 		<hr>
 
@@ -404,6 +404,27 @@
 
 		<h3 align="middle">Task 3: Direct Lighting with Uniform Hemisphere Shading</h3>
 		<hr>
+
+			<p>
+				With uniform hemisphere shading, we first iterated through <code>num_samples</code> samples by sampling a <code>new_sample</code> vector from the hemisphere after using <code>hemisphereSampler</code>. We calculated its world-space coordinates by multiplying it with <code>o2w</code> and created a new sample <code>Ray</code> (<code>new_ray</code>) with the new origin and direction. We made sure to also set <code>new_ray</code>'s <code>min_t</code> to <code>EPS_F</code>.
+			</p>
+
+			<p>
+				Afterwards, we created a new <code>Intersection</code> labeled <code>new_isect</code> and checked whether the bounding volume hierarchy intersected the sampled <code>Ray</code> by calling <code>intersect</code> — the output returned was stored in a <code>Boolean</code> variable named <code>is_intersected</code>.
+			</p>
+
+			<p>
+				If there was an intersection, we calculated the <code>L_i</code>, <code>f_r</code>, <code>cos(theta_j)</code>, and <code>pdf</code> values within the reflection equation to get the outgoing lighting. For <code>L_i</code>, this was simply obtaining the emission of the intersection's BSDF. To obtain <code>f_r</code> (<code>f_result</code>), we used the function we wrote in Task 1 to calculate the BSDF. Earlier, we calculated <code>cos(theta_j)</code> by finding the dot product between the surface normal of the intersection and the world-space unis of the ray. The <code>pdf</code> is the probability of sampling any point uniformly which is \( \frac{1}{{2 \pi}} \).
+			</p>
+
+			<p>
+				We created <code>final_sample</code> which essentially helped us add \left( \frac{{f_{\text{result}} \times \text{obj_emission} \times \text{costheta}}}{{\text{pdf}}} \right) \text{ to } L_{\text{out}} for each sample Ray. After all iterations, we normalized <code>L_out</code> by dividing by <code>num_samples</code>.
+			</p>
+
+			<p>
+				Below are images of running `./pathtracer -t 8 -s 16 -l 8 -H -f CBbunny_H_16_8.png -r 480 360 ../dae/sky/CBbunny.dae`, `./pathtracer -t 8 -s 64 -l 32 -m 6 -H -f CBbunny_H_64_32.png -r 480 360 ../dae/sky/CBbunny.dae` and `./pathtracer -t 8 -s 64 -l 32 -m 6 -H -f CBempty.png -r 480 360 ../dae/sky/CBspheres_lambertian.dae` with uniform hemisphere sampling.
+			</p>
+		
 			<div style="display: flex; justify-content: space-between;">
 					
 				<div style="flex: 1; margin-right: 10px; text-align: center;">
@@ -459,6 +480,34 @@
 
 		<h3 align="middle">Task 4: Direct Lighting by Importance Sampling Lights</h3>
 		<hr>
+			<p>
+				Importance sampling is similar to uniform hemisphere sampling with the exception of now iterating through all the lights via <code>scene->lights.begin()</code>. First, we need to check whether <code>is_delta_light()</code> returns true if the light is a point light source. This is because if we sample a point light source, the ray's direction doesn't matter since the outgoing light is the same, hence why only one sample is needed. Otherwise, <code>num_samples</code> is equal to <code>ns_area_light</code>. 
+			</p>
+
+			<p>
+				While still iterating through the lights, we now need to iterate through all of the samples for that light. We created a new vector <code>L</code> assigned to the output of calling <code>sample_L</code>, which also sets <code>wi</code>, <code>distToLight</code> and <code>pdf</code>. Following the same steps in uniform hemisphere sampling, we generated a new sample <code>Ray</code> (<code>new_ray</code>) and set it's <code>min_T</code> and <code>max_T</code> values to <code>EPS_F</code> and <code>dist - EPS_F</code> respectively. Afterwards, we created a new <code>Intersection</code> and checked if there was an intersection by using <code>intersect</code>. 
+			</p>
+
+		    	<p>
+			    	If there isn't an intersection, we calculated the \( f_r \) to compute the reflection equation to get the outgoing lighting. This is because if there was an intersection, we don't want to illuminate it because of the previous intersection. We added \( \frac{{L_i \times f_r \times \cos(\theta)}}{{\text{pdf}}} \) to \( L_{\text{out}} \) and after iterating through all of the samples per light, we normalized the outgoing light by dividing by \( \text{num_samples} \). This was then added to \( \text{result} \) (final \( L_{\text{out}} \)) and returned.
+		    	</p>
+
+			<p>
+				Below are images generated when running <code>./pathtracer -t 8 -s 64 -l 32 -m 6 -f {filename}.png -r 480 360 ../dae/sky/{filename}.dae</code> for importance sampling lights.
+			</p>
+
+			<p>
+				Using light importance sampling, we can also compare the noise levels in soft shadows when rendering with 1, 4, 16, and 64 light rays (the <code>-l</code> flag) and 1 sample per pixel (the <code>-s</code> flag) for <code>../dae/sky/CBbunny.dae</code>. When there are more light rays, we can see that there is less noise in the rendered images. The shadows become more smooth and the edges are less rigid because with less light rays, each shadow point is clearer. With more light rays, there is a greater range, allowing for more variation in the shadows.
+			</p>
+
+			<p>
+				<u>Uniform Hemisphere Sampling vs Light Sampling</u>
+			</p>
+
+			<p>
+				As seen in the images above, lighting sampling results in smoother and sharper images whereas uniform hemisphere sampling results in grainier/noisier images. This is a result of uniform hemisphere sampling taking samples in different directions around a given point, thus causing some areas to be darker/grainer. Lighting sampling samples from the light source - samples that actually affect the final lighting. By doing this, we remove noise because not all samples of hemisphere sampling were not in the direction of the light source.
+			</p>
+		
 			<div style="display: flex; justify-content: space-between;">
 					
 				<div style="flex: 1; margin-right: 10px; text-align: center;">
@@ -480,6 +529,7 @@
 			
 		<h3 align="middle">Task 1: Sampling with Diffuse BSDF</h3>
 		<hr>
+		
 		<hr>
 
 		<h3 align="middle">Task 2: Global Illumination with up to N Bounces of Light</h3>
