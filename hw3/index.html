@@ -386,7 +386,7 @@
 		<h3 align="middle">Task 1: Diffuse BSDF</h3>
 		<hr>
 			<p>
-				<code>DiffuseBSDF::f</code> represents a diffuse material that reflects incoming light equally in all directions on the hemisphere. Originally, we returned the <code>reflectance</code> of the <code>DiffuseBSDF</code> but this didn't match the image in spec. The surface area of a unit hemisphere is <code>\(2 \times \pi\)</code> and based off of lecture slides, the integral of cosine over hemisphere is only <code>1/2</code> the area of the hemisphere, thus why we chose to divide <code>reflectance</code> by <code>\( \pi \)</code> and resulted in the correct matching image.
+				<code>DiffuseBSDF::f</code> represents a diffuse material that reflects incoming light equally in all directions on the hemisphere. Originally, we returned the <code>reflectance</code> of the <code>DiffuseBSDF</code> but this didn't match the image in spec. The surface area of a unit hemisphere is \(2 \times \pi\) and based off of lecture slides, the integral of cosine over hemisphere is only <code>1/2</code> the area of the hemisphere, thus why we chose to divide <code>reflectance</code> by \( \pi \) and resulted in the correct matching image.
 			</p>
 		<hr>
 
@@ -414,11 +414,11 @@
 			</p>
 
 			<p>
-				If there was an intersection, we calculated the <code>L_i</code>, <code>f_r</code>, <code>cos(theta_j)</code>, and <code>pdf</code> values within the reflection equation to get the outgoing lighting. For <code>L_i</code>, this was simply obtaining the emission of the intersection's BSDF. To obtain <code>f_r</code> (<code>f_result</code>), we used the function we wrote in Task 1 to calculate the BSDF. Earlier, we calculated <code>cos(theta_j)</code> by finding the dot product between the surface normal of the intersection and the world-space unis of the ray. The <code>pdf</code> is the probability of sampling any point uniformly which is \( \frac{1}{{2 \pi}} \).
+				If there was an intersection, we calculated the <code>L_i</code>, <code>f_r</code>, \( \cos(\theta_j) \), and <code>pdf</code> values within the reflection equation to get the outgoing lighting. For <code>L_i</code>, this was simply obtaining the emission of the intersection's BSDF. To obtain <code>f_r</code> (<code>f_result</code>), we used the function we wrote in Task 1 to calculate the BSDF. Earlier, we calculated \( \cos(\theta_j) \) by finding the dot product between the surface normal of the intersection and the world-space unis of the ray. The <code>pdf</code> is the probability of sampling any point uniformly which is \( \frac{1}{{2 \pi}} \).
 			</p>
 
 			<p>
-				We created <code>final_sample</code> which essentially helped us add \left( \frac{{f_{\text{result}} \times \text{obj_emission} \times \text{costheta}}}{{\text{pdf}}} \right) \text{ to } L_{\text{out}} for each sample Ray. After all iterations, we normalized <code>L_out</code> by dividing by <code>num_samples</code>.
+				We created <code>final_sample</code>, which essentially helped us add \( \left( \frac{{f_{\text{result}} \times \text{obj_emission} \times \text{costheta}}}{{\text{pdf}}} \right) \) to \( L_{\text{out}} \) for each sample Ray. After all iterations, we normalized <code>L_out</code> by dividing by <code>num_samples</code>.
 			</p>
 
 			<p>
@@ -438,13 +438,13 @@
 					<p>
 						<code>CBbunny_H_64_32.png</code>
 					</p>
-				 </div>
+				 </div> 
 			</div>
 
 			<br><br>
 
 			<div style="text-align: center;">
-				<img src="images/CBspheres_lambertian-3.3.png" width="750px" />
+				<img src="images/CBspheres_lambertian-3.3.png" width="100%" />
 				<p>Screenshot of <code>../dae/sky/CBspheres_lambertian.dae</code></p>
 			</div>
 
@@ -473,13 +473,13 @@
 				<div style="flex: 1; margin-right: 10px; text-align: center;">
 					<img src="images/bunny_64_32-3.4.png" width="100%" />
 					<p>
-						<code>../dae/sky/CBbunny.dae</code>
+						<code>../dae/sky/CBbunny.dae</code>, 1 sample per pixel
 					</p>
 				</div>
 				<div style="flex: 1; margin-left: 10px; text-align: center;">
-					<img src="images/CBbunny-sample4.png" width="100%" />
+					<img src="images/bunny_1_1-3.4.png" width="100%" />
 					<p>
-						<code>../dae/sky/CBbunny.dae</code>, 4 light rays
+						<code>../dae/sky/CBbunny.dae</code>, 64 samples per pixel
 					</p>
 				 </div>
 			</div>
@@ -487,7 +487,7 @@
 			<br><br>
 
 			<div style="text-align: center;">
-				<img src="images/dragon_64_32-3.4.png" width="750px" />
+				<img src="images/dragon_64_32-3.4.png" width="100%" />
 				<p>Screenshot of <code>../dae/sky/dragon.dae</code></p>
 			</div>
 		
@@ -540,7 +540,7 @@
 			<div style="display: flex; justify-content: space-between;">
 					
 				<div style="flex: 1; margin-right: 10px; text-align: center;">
-					<img src="images/bunny_1_1-3.4.png" width="100%" />
+					<img src="images/CBbunny_H_64_32-3.3.png" width="100%" />
 					<p>
 						<code>../dae/sky/CBbunny.dae</code> with uniform hemisphere sampling
 					</p>
