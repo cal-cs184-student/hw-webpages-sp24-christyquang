@@ -418,7 +418,7 @@
 			</p>
 
 			<p>
-				We created <code>final_sample</code>, which essentially helped us add \( \left( \frac{{f_{\text{result}} \times \text{obj_emission} \times \text{costheta}}}{{\text{pdf}}} \right) \) to \( L_{\text{out}} \) for each sample Ray. After all iterations, we normalized <code>L_out</code> by dividing by <code>num_samples</code>.
+				We created <code>final_sample</code>, which essentially helped us add \( \frac{{L_i \times f_r \times \cos(\theta)}}{{\text{pdf}}} \) to \( L_{\text{out}} \) for each sample Ray. After all iterations, we normalized <code>L_out</code> by dividing by <code>num_samples</code>.
 			</p>
 
 			<p>
@@ -471,16 +471,16 @@
 			<div style="display: flex; justify-content: space-between;">
 					
 				<div style="flex: 1; margin-right: 10px; text-align: center;">
-					<img src="images/bunny_64_32-3.4.png" width="100%" />
+					<img src="images/bunny_1_1-3.4.png" width="100%" />
 					<p>
 						<code>../dae/sky/CBbunny.dae</code>, 1 sample per pixel
 					</p>
 				</div>
 				<div style="flex: 1; margin-left: 10px; text-align: center;">
-					<img src="images/bunny_1_1-3.4.png" width="100%" />
+					<img src="images/bunny_64_32-3.4.png" width="100%" />
 					<p>
 						<code>../dae/sky/CBbunny.dae</code>, 64 samples per pixel
-					</p>
+					</p> 
 				 </div>
 			</div>
 
@@ -558,7 +558,9 @@
 			
 		<h3 align="middle">Task 1: Sampling with Diffuse BSDF</h3>
 		<hr>
-		
+			<p>
+				This was the same as Part 3 Task 1.
+			</p>
 		<hr>
 
 		<h3 align="middle">Task 2: Global Illumination with up to N Bounces of Light</h3>
