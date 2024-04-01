@@ -21,6 +21,7 @@
 		<title>CS 184 Mesh Editor</title>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<link href=https://fonts.googleapis.com/css?family=Nunito rel="stylesheet">
+		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 	</head>
 
 
@@ -35,7 +36,7 @@
 
 		<div style="text-align: center;">
 			<img src="images/CBbunny m=5 o=1.png" width="50%" />
-			<p><code>me when i finish hw3 12 days late :D</code></p>
+			<p><code>us when we finish hw3 12 days late :D</code></p>
 		</div>
 		<br>
 
@@ -50,6 +51,71 @@
 			<h2 align="middle">Part 1: Masses and Springs</h2>
 			<hr>
 
+			<p>
+				The goal of this section was to create a grid of masses and springs. First, we iterated through <code>num_height_points</code> and <code>num_width_points</code> via an inner loop to generate the point masses in row-major order, alongside the masses being evenly spaced. Based on the orientation (horizontal or vertical), we varied across the <code>xy</code> plane or the <code>xz</code> plane. If the point mass's <code>(x, y)</code> index is within the cloth's <code>pinned</code> vector, we set the point mass's <code>pinned</code> boolean to <code>true</code>. The <code>pinned</code> boolean indicates whether the point mass will remain stationary/pinned throughout the simulation.
+			</p>
+
+			<p>
+				After creating the grid of point masses, we needed to create springs to apply the structural, shear, and bending constraints between point masses. These are the restraints indicating what constraints would be applied:
+			</p>
+
+			<ul>
+				<li>
+					Structural: A point mass and the point mass to its left + the point mass above it
+				</li>
+				<li>
+					Shearing: A point mass and the point mass to its diagonal upper left + the point mass to its diagonal upper right.
+				</li>
+				<li>
+					Bending: A point mass and the point mass two away to its left + the point mass two above it
+				</li>
+			</ul>
+
+			<p>
+				Below are images of the entire grid zoomed out and zoomed in when running <code>./clothsim -f ../scene/pinned2.json</code>:
+			</p>
+
+			<div style="display: flex; justify-content: space-between;">
+					
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/p1-entiregrid.png" width="100%" />
+					<p>
+						<code>../scene/pinned2.json</code>, entire grid
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/p1-entiregrid-zoom.png" width="100%" />
+					<p>
+						<code>../scene/pinned2.json</code>, entire grid zoomed
+					</p>
+				 </div>
+			</div>
+
+			<p>
+				Below, we can see images of the grid with the different constraints applied:
+			</p>
+
+			<div style="display: flex; justify-content: space-between;">
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/p1-without-shearing.png" width="100%" />
+					<p>
+						<code>../scene/pinned2.json</code>, without shearing constraints
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/p1-with-shearing.png" width="100%" />
+					<p>
+						<code>../scene/pinned2.json</code>, with only shearing constraints
+					</p>
+				 </div>
+			</div>
+
+			<div style="text-align: center;">
+				<img src="images/p1-with-all.png" width="50%" />
+				<p><code>../scene/pinned2.json</code>, with all constraints</p>
+			</div>
+
+
 			<br>
 
 			<hr>
@@ -59,11 +125,174 @@
 			<h3 align="middle">Task 1: Compute total force acting on each point mass</h3>
 			<hr>
 
+			<p>
+				In this task, we first calculated the external forces done by looping through the <code>external_accelerations</code>. All accelerations are applied uniformly so we summed all of the <code>external_forces</code> (a <code>Vector3D</code>) using Newton's 2nd Law (\(F = ma\)). Afterwards, we looped through all of the point masses and set each <code>forces</code> to <code>external_force</code>.
+			</p>
+
+			<p>
+				Next, we needed to apply the spring correction forces using Hooke's Law, \(F_s = k_s * (||p_a - p_b|| - l)\). For each spring, we apply \(F_s\) force to the point mass on one end and then an equal, but negated force on the other end. Bending constraints should be weaker than the other two constraints which is why we multiplied \(k_s * 0.2\).
+			</p>
+
+			<hr>
 			<h3 align="middle">Task 2: Use Verlet integration to compute new point mass positions</h3>
 			<hr>
 
+			<p>
+				In this task, we compute a point mass's new position by using Verlet integration on all unpinned point masses. The new position is calculated by \(x_{t+dt} = x_t + (1 - d) * (x_t - x_{t-dt}) + a_t * dt^2\). We also needed to update the point mass's <code>last_position</code> to the previous position prior to using Verlet integration.
+			</p>
+
+			<hr>
 			<h3 align="middle">Task 3: Constrain position updates</h3>
 			<hr>
+
+			<div style="display: flex; justify-content: space-between;">
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/p2-finalresting-wireframe.png" width="100%" />
+					<p>
+						<code>../scene/pinned4.json</code>, final state (wireframe)
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/p2-finalresting-normal.png" width="100%" />
+					<p>
+						<code>../scene/pinned4.json</code>, final state (normal)
+					</p>
+				 </div>
+			</div>
+
+
+			<h4>Changing <code>ks</code></h4>
+			<div style="display: flex; justify-content: space-between;">
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/p2-ks=50-wireframe.png" width="100%" />
+					<p>
+						<code>../scene/pinned2.json</code>, <code>ks = 50 N/m</code>, wireframe
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/p2-ks=50-normal.png" width="100%" />
+					<p>
+						<code>../scene/pinned2.json</code>, <code>ks = 50 N/m</code>, normal
+					</p>
+				 </div>
+			</div>
+
+			<br>
+
+			<div style="display: flex; justify-content: space-between;">
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/p2-ks=500-wireframe.png" width="100%" />
+					<p>
+						<code>../scene/pinned2.json</code>, <code>ks = 500 N/m</code>, wireframe
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/p2-ks=500-normal.png" width="100%" />
+					<p>
+						<code>../scene/pinned2.json</code>, <code>ks = 500 N/m</code>, normal
+					</p>
+				 </div>
+			</div>
+
+			<br>
+
+			<div style="display: flex; justify-content: space-between;">
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/p2-ks=50000-wireframe.png" width="100%" />
+					<p>
+						<code>../scene/pinned2.json</code>, <code>ks = 50,000 N/m</code>, wireframe
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/p2-ks=50000-normal.png" width="100%" />
+					<p>
+						<code>../scene/pinned2.json</code>, <code>ks = 50,000 N/m</code>, normal
+					</p>
+				 </div>
+			</div>
+
+			<h4>Changing <code>density</code></h4>
+			<div style="display: flex; justify-content: space-between;">
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/p2-density=50-wireframe.png" width="100%" />
+					<p>
+						<code>../scene/pinned2.json</code>, <code>density = 50 g/cm^2</code>, wireframe
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/p2-density=50-normal.png" width="100%" />
+					<p>
+						<code>../scene/pinned2.json</code>, <code>density = 50 g/cm^2</code>, normal
+					</p>
+				 </div>
+			</div>
+
+			<br>
+
+			<div style="display: flex; justify-content: space-between;">
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/p2-density=500-wireframe.png" width="100%" />
+					<p>
+						<code>../scene/pinned2.json</code>, <code>density = 500 g/cm^2</code>, wireframe
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/p2-density=500-normal.png" width="100%" />
+					<p>
+						<code>../scene/pinned2.json</code>, <code>density = 500 g/cm^2</code>, normal
+					</p>
+				 </div>
+			</div>
+
+			<br>
+
+			<div style="display: flex; justify-content: space-between;">
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/p2-density=50000-wireframe.png" width="100%" />
+					<p>
+						<code>../scene/pinned2.json</code>, <code>density = 50000 g/cm^2</code>, wireframe
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/p2-density=50000-normal.png" width="100%" />
+					<p>
+						<code>../scene/pinned2.json</code>, <code>ks = 50000 N/m</code>, normal
+					</p>
+				 </div>
+			</div>
+
+			<h4>Changing <code>damping</code></h4>
+			<div style="display: flex; justify-content: space-between;">
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/p2-damping=0-wireframe.png" width="100%" />
+					<p>
+						<code>../scene/pinned2.json</code>, <code>damping = 0%</code>, wireframe
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/p2-damping=0-normal.png" width="100%" />
+					<p>
+						<code>../scene/pinned2.json</code>, <code>damping = 0%</code>, normal
+					</p>
+				 </div>
+			</div>
+
+			<br>
+
+			<div style="display: flex; justify-content: space-between;">
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/p2-damping=1-wireframe.png" width="100%" />
+					<p>
+						<code>../scene/pinned2.json</code>, <code>damping = 1%</code>, wireframe
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/p2-damping=1-normal.png" width="100%" />
+					<p>
+						<code>../scene/pinned2.json</code>, <code>damping = 1%</code>, normal
+					</p>
+				 </div>
+			</div>
 
 			<br>
 
@@ -75,7 +304,6 @@
 
 			<hr>
 			<h3 align="middle">Task 2: Handling collisions with planes</h3>
-
 			<br>
 
 			<hr>
