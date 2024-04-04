@@ -404,6 +404,10 @@
 			<h3 align="middle">Task 1: Handling collisions with spheres</h3>
 			<hr>
 
+			<p>
+				In this task, we handle collisions with spheres by registering when a collision "occurs" (depends on sphere vs. plane) and then calculate a correction to the point mass's current position so that it is just outside the surface of the object being collided into. A collision occurs when the point mass has a distance to the center of the sphere less than its radius. If a collision occurs, we calculate the tangent point along the sphere where the collision would have occured and use that value to calculate the correction vector. When updating the point mass's position, we make sure to scale by <code>1 - friction</code> when multiplying by the correction vector. We also needed to update <code>Cloth::simulate</code> to check for collisions between every <code>PointMass</code> and <code>CollisionObject</code>.
+			</p>
+
 			<blockquote><b>
 				Show us screenshots of your shaded cloth from <i>scene/sphere.json</i> in its final resting state 
 				on the sphere using the default <code>ks = 5000</code> as well as with <code>ks = 500</code> and <code>ks = 50000</code>. 
@@ -413,9 +417,17 @@
 				<small>Describe the differences in the results.</small>
 			</b></blockquote>
 
+			<p>
+				We can see through the images below that when we increase <code>ks</code>, this results in increasing the stiffness of the spring. The cloth becomes more rigid and there is more structure to the folds. The material also goes from looking like velvet/silk to a stiffer material. This makes sense because a stiff spring will resist the deformation from gravity. In contrast, at lower <code>ks</code> values, the cloth is more flexible because of a weaker spring, hence why it appears more "loose" and drapes easier.
+			</p>
+
 			<hr>
 			<h3 align="middle">Task 2: Handling collisions with planes</h3>
 			<hr>
+
+			<p>
+				In this task, we handle collisions with planes - for a plane, a collision occurs when the point mass has crossed the plane. We determine if a point had crossed the plane by checking if the dot product of the movement vector and the normal vector is negative. If so, we apply a correction which uses the tangent point at which the collision between the point mass and the plane would have occurred. We also needed to factor in <code>SURFACE_OFFSET</code> when multiplying by the normal vector. The correction vector is also similar to collisions with a sphere. Lastly, we also needed to update <code>Cloth::simulate</code> to check for collisions between every <code>PointMass</code> and <code>CollisionObject</code>.
+			</p>
 
 			<blockquote><b>
 				Show us a screenshot of your shaded cloth lying peacefully at rest on the plane. 
@@ -435,6 +447,7 @@
 				Prior to this section, our cloth when colliding with itself would just clip through itself. To prevent this, we would need to implement that whenever the cloth fell on itself, it would fold. For each point mass, we need to check whether it is within some small number (<code>2 * thickness</code>) away from another point (not including itself). If it is too close, then we apply a correction/repulsive collision force (to maintain a minimum of <code>2 * thickness</code> distance away).
 			</p>
 
+			<hr>
 			<h3 align="middle">Task 1: <code>Cloth::hash_position</code></h3>
 			<hr>
 
