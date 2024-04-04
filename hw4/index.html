@@ -190,8 +190,60 @@
 				</small>
 			</b></blockquote>
 
+			<p>
+				To help keep springs from being unreasonably deformed during each time step, we implemented an additional feature based on the SIGGRAPH 1995 Provot paper on deformation constraints in mass-spring models. For each spring, we applied this constraint to prevent springs from extending more than 10% greater than its <code>rest_length</code> at the end of any time step.
+			</p>
 
-			<h4>Changing <code>ks</code></h4>
+			<p>
+				If the spring's length doesn't extend more than 10% greater than its <code>rest_length</code>, we perform the following conditions to the point masses:
+			</p>
+
+			<ul>
+				<li>
+					Both point masses are pinned: Do nothing
+				</li>
+				<li>
+					One point mass is pinned: Correction entirely by the other point mass
+				</li>
+				<li>
+					Neither point masses are pinned: Correct by half to each point mass
+				</li>
+			</ul>
+
+			<p>
+				Below are images of running <code>./clothsim -f ../scene/pinned2.json</code> with the default parameters of <code>ks = 5000 N/m, density = 15 g/cm^2, damping = 0.2%</code> to help showcase how experimenting with parameters causes the cloth to change.
+			</p>
+
+			<div style="display: flex; justify-content: space-between;">
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/p2-finalresting-wireframe.png" width="100%" />
+					<p>
+						<code>../scene/pinned4.json</code>, final resting state, wireframe
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/p2-finalresting-normal.png" width="100%" />
+					<p>
+						<code>../scene/pinned4.json</code>, final resting state, normal
+					</p>
+				 </div>
+			</div>
+
+			<br>
+
+			<blockquote><b>
+				<small>
+				For each of the below observe any noticeable differences in the cloth compared to the default parameters 
+				and show us some screenshots of those interesting differences and describe when they occur.
+				</small>
+			</b></blockquote>
+
+			<h3>Changing <code>ks</code></h3>
+			
+			<p>
+				When maintaining the default parameters (<code>density</code>, <code>damping</code>) and only modifying the spring constant, <code>ks</code>, we can see that as <code>ks</code> increases, the cloth becomes less malleable. This is because increasing the spring constant results in increasing the spring's stiffness, causing the cloth to appear less "creased" and more rigid/flat. At lower <code>ks</code> values, the strength of the springs is lower, hence why the cloth is more flexible and has more folds/creases. 
+			</p>
+
 			<div style="display: flex; justify-content: space-between;">
 				<div style="flex: 1; margin-right: 10px; text-align: center;">
 					<img src="images/p2-ks=50-wireframe.png" width="100%" />
@@ -241,7 +293,10 @@
 				 </div>
 			</div>
 
-			<h4>Changing <code>density</code></h4>
+			<h3>Changing <code>density</code></h3>
+			<p>
+				When maintaining the default parameters (<code>ks</code>, <code>damping</code>) and only modifying the <code>density</code>, we can see that its effect on the cloth is almost inversely to <code>ks</code> — increasing the <code>density</code> has similar results to the cloth as decreasing the <code>ks</code>. At lower <code>density</code> values, the cloth has lower mass. Using Newton's Second Law (\(F = ma\)), this means that the forces accumulated at each point mass will be less, causing less forces to pull the cloth down and ultimately resulting in less creases/folds in the cloth (more flat). At higher <code>density</code> values, the forces accumulated at each point mass are greater which is why there are more creases/folds in the cloth. 
+			</p>
 			<div style="display: flex; justify-content: space-between;">
 				<div style="flex: 1; margin-right: 10px; text-align: center;">
 					<img src="images/p2-density=50-wireframe.png" width="100%" />
@@ -286,12 +341,16 @@
 				<div style="flex: 1; margin-left: 10px; text-align: center;">
 					<img src="images/p2-density=50000-normal.png" width="100%" />
 					<p>
-						<code>../scene/pinned2.json</code>, <code>ks = 50000 N/m</code>, normal
+						<code>../scene/pinned2.json</code>, <code>ks = 50000 g/cm^2</code>, normal
 					</p>
 				 </div>
 			</div>
 
-			<h4>Changing <code>damping</code></h4>
+			<h3>Changing <code>damping</code></h3>
+
+			<p>
+				When maintaining the default parameters (<code>ks</code>, <code>density</code>) and only modifying <code>damping</code>, we can immediately see that modifying <code>damping</code> impacts the speed at which the simulation/cloth reaches a state of rest. When <code>damping</code> is increased, this causes the cloth to stop its motion at a faster speed compared to a lower <code>damping</code> value. A higher <code>damping</code> causes the cloth to swing back and forth more rapidly. <code>damping</code> impacts the velocity value in Verlet integration so when <code>damping</code> is a lower value, there is no loss of energy, hence why the cloth rapidly swings. When <code>damping</code> is increased, the forces acting on the cloth are "dampened" and there is a loss of energy, hence why the cloth swings less rapidly. This is most evidently seen when comparing <code>damping = 1 g/cm^2</code> and <code>damping = 50000 g/cm^2</code>.
+			</p>
 			<div style="display: flex; justify-content: space-between;">
 				<div style="flex: 1; margin-right: 10px; text-align: center;">
 					<img src="images/p2-damping=0-wireframe.png" width="100%" />
@@ -323,13 +382,6 @@
 					</p>
 				 </div>
 			</div>
-
-			<blockquote><b>
-				<small>
-				For each of the above, observe any noticeable differences in the cloth compared to the default parameters 
-				and show us some screenshots of those interesting differences and describe when they occur.
-				</small>
-			</b></blockquote>
 
 			<blockquote><b>
 				Show us a screenshot of your shaded cloth from <i>scene/pinned4.json</i> in its final resting state! 
@@ -406,15 +458,127 @@
 				and ending with the cloth at a more restful state (even if it is still slightly bouncy on the ground).
 			</b></blockquote>
 
+			<div style="display: flex; justify-content: space-between;">
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/p4-1-selfcollision.png" width="100%" />
+					<p>
+						<code>../scene/selfCollision.json</code>, early, initial self-collision
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/p4-2-selfcollision.png" width="100%" />
+					<p>
+						<code>../scene/selfCollision.json</code>, continuing to fall down
+					</p>
+				 </div>
+			</div>
+
+			<br>
+
+			<div style="display: flex; justify-content: space-between;">
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/p4-3-selfcollision.png" width="100%" />
+					<p>
+						<code>../scene/selfCollision.json</code>, down with more folds
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/p4-4-selfcollision.png" width="100%" />
+					<p>
+						<code>../scene/selfCollision.json</code> unravelling
+					</p>
+				 </div>
+			</div>
+
+			<br>
+
+			<div style="display: flex; justify-content: space-between;">
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/p4-5-selfcollision.png" width="100%" />
+					<p>
+						<code>../scene/selfCollision.json</code>, continuing to unravel itself
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/p4-6-selfcollision.png" width="100%" />
+					<p>
+						<code>../scene/selfCollision.json</code>, final resting state
+					</p>
+				 </div>
+			</div>
+
 			<blockquote><b>
 				Vary the <code>density</code> as well as <code>ks</code> 
-				
 				and describe with words and screenshots how they affect the behavior of the cloth as it falls on itself.
 			</b></blockquote>
 
-			<h4>Changing <code>ks</code></h4>
+			<h3>Changing <code>ks</code></h3>
+			<div style="display: flex; justify-content: space-between;">
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/p4-ks=50-1.png" width="100%" />
+					<p>
+						<code>../scene/selfCollision.json</code>, <code>ks = 50 N/m</code>, very small waves
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/p4-ks=50-2.png" width="100%" />
+					<p>
+						<code>../scene/selfCollision.json</code>, <code>ks = 50 N/m</code>, with many self-collisions/ripples
+					</p>
+				 </div>
+			</div>
 
-			<h4>Changing <code>density</code></h4>
+			<br>
+
+			<div style="display: flex; justify-content: space-between;">
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/p4-ks=50000-1.png" width="100%" />
+					<p>
+						<code>../scene/selfCollision.json</code>, <code>ks = 50,000 N/m</code>, much larger waves
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/p4-ks=50000-2.png" width="100%" />
+					<p>
+						<code>../scene/selfCollision.json</code>, <code>ks = 50,000 N/m</code>, larger folds as it begins to settle
+					</p>
+				 </div>
+			</div>
+
+			<br>
+
+			<h3>Changing <code>density</code></h3>
+			<div style="display: flex; justify-content: space-between;">
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/p4-density=1-1.png" width="100%" />
+					<p>
+						<code>../scene/selfCollision.json</code>, <code>density = 1 g/cm^2</code>, beginning to fold over
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/p4-density=1-2.png" width="100%" />
+					<p>
+						<code>../scene/selfCollision.json</code>, <code>density = 1 g/cm^2</code>, slowly unravelling
+					</p>
+				 </div>
+			</div>
+
+			<br>
+
+			<div style="display: flex; justify-content: space-between;">
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/p4-density=50-1.png" width="100%" />
+					<p>
+						<code>../scene/selfCollision.json</code>, <code>density = 50 g/cm^2</code>, many small ripples
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/p4-density=50-2.png" width="100%" />
+					<p>
+						<code>../scene/selfCollision.json</code>, <code>density = 50 g/cm^2</code>, still falling down with more ripples/folds
+					</p>
+				 </div>
+			</div>
 
 			<br>
 
