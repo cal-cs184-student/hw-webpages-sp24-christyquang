@@ -259,8 +259,6 @@
 				 </div>
 			</div>
 
-			<br>
-
 			<div style="display: flex; justify-content: space-between;">
 				<div style="flex: 1; margin-right: 10px; text-align: center;">
 					<img src="images/p2-ks=500-wireframe.png" width="100%" />
@@ -275,8 +273,6 @@
 					</p>
 				 </div>
 			</div>
-
-			<br>
 
 			<div style="display: flex; justify-content: space-between;">
 				<div style="flex: 1; margin-right: 10px; text-align: center;">
@@ -312,8 +308,6 @@
 				 </div>
 			</div>
 
-			<br>
-
 			<div style="display: flex; justify-content: space-between;">
 				<div style="flex: 1; margin-right: 10px; text-align: center;">
 					<img src="images/p2-density=500-wireframe.png" width="100%" />
@@ -328,8 +322,6 @@
 					</p>
 				 </div>
 			</div>
-
-			<br>
 
 			<div style="display: flex; justify-content: space-between;">
 				<div style="flex: 1; margin-right: 10px; text-align: center;">
@@ -365,8 +357,6 @@
 					</p>
 				 </div>
 			</div>
-
-			<br>
 
 			<div style="display: flex; justify-content: space-between;">
 				<div style="flex: 1; margin-right: 10px; text-align: center;">
@@ -441,16 +431,40 @@
 			</a>
 			<hr>
 
+			<p>
+				Prior to this section, our cloth when colliding with itself would just clip through itself. To prevent this, we would need to implement that whenever the cloth fell on itself, it would fold. For each point mass, we need to check whether it is within some small number (<code>2 * thickness</code>) away from another point (not including itself). If it is too close, then we apply a correction/repulsive collision force (to maintain a minimum of <code>2 * thickness</code> distance away).
+			</p>
+
 			<h3 align="middle">Task 1: <code>Cloth::hash_position</code></h3>
 			<hr>
+
+			<p>
+				In this task, we implemented <code>Cloth::hash_position</code> which takes in a point mass's position and calculates its 3D box volume's index in our spatial hash table. The idea is to check within a point's 3D box volume instead of throughout the entire cloth. This was done by first calculating its 3D position <code>(w, h, t)</code> where <code>w = 3 * width / num_width_points</code>, <code>h = 3 * height / num_height_points</code>, and <code>t = max(w, h)</code>. We determined the 3D box coordinates by calculating <code>x = (pos.x - fmod(pos.x, w))/w</code>, <code>y = (pos.y - fmod(pos.y, h))/h</code>, and <code>z = (pos.z - fmod(pos.z, t))/t</code>. Afterwards, we transformed the 3D position to 1D through our hash expression.
+			</p>
 
 			<hr>
 			<h3 align="middle">Task 2: <code>Cloth::build_spatial_map</code></h3>
 			<hr>
 
+			<p>
+				In this task, we constructed our spatial map by iterating through all <code>point_masses</code> in the cloth and calculated its <code>hash</code>. If there isn't already a <code>vector<PointMass *></code> at that position, a new one is initialized and we also <code>push_back</code> the current point mass. 
+			</p>
+
 			<hr>
 			<h3 align="middle">Task 3: <code>Cloth::self_collide</code></h3>
 			<hr>
+
+			<p>
+				In this task, we check each point mass to see whether the normalized distance between it and candidate point masses is less than <code>2 * thickness</code>. If a collision is detected, a correction vector is calculated based on the difference between the desired separation distance (<code>2 * thickness</code>) and the actual distance between the point masses.
+			</p>
+
+			<p>
+				If any corrections were calculated, the average correction vector is computed and the position of the given point mass is adjusted by adding the correction vector to it.
+			</p>
+
+			<p>
+				We also needed to update <code>Cloth::simulate</code> to build our spatial map and iterate through the point masses to call <code>self_collide</code> on them. 
+			</p>
 
 			<blockquote><b>
 				Show us at least 3 screenshots that document how your cloth falls and folds on itself, 
@@ -473,8 +487,6 @@
 				 </div>
 			</div>
 
-			<br>
-
 			<div style="display: flex; justify-content: space-between;">
 				<div style="flex: 1; margin-right: 10px; text-align: center;">
 					<img src="images/p4-3-selfcollision.png" width="100%" />
@@ -489,8 +501,6 @@
 					</p>
 				 </div>
 			</div>
-
-			<br>
 
 			<div style="display: flex; justify-content: space-between;">
 				<div style="flex: 1; margin-right: 10px; text-align: center;">
@@ -513,6 +523,10 @@
 			</b></blockquote>
 
 			<h3>Changing <code>ks</code></h3>
+
+			<p>
+				When maintaining the default parameters (<code>density</code>, <code>damping</code>) and only modifying the spring constant, <code>ks</code>, we can see that at a lower <code>ks</code> value (<code>ks = 50 N/m</code>), the cloth has a bunch of folds, similar to a piece of aluminum foil or tissue paper. The ripples are very small and there are a bunch of self collisions, which makes sense intuitively since the spring constant is smaller. With a lower <code>ks</code>, the cloth is more malleable/flexible since it has less structure. We can compare this to <code>ks</code> being a greater value — when <code>ks = 50,000 N/m</code>, there are less folds ("bigger" folds compared to when <code>ks = 50 N/m</code>) and the strength of the cloth is greater due to the higher spring constant.
+			</p>
 			<div style="display: flex; justify-content: space-between;">
 				<div style="flex: 1; margin-right: 10px; text-align: center;">
 					<img src="images/p4-ks=50-1.png" width="100%" />
@@ -527,8 +541,6 @@
 					</p>
 				 </div>
 			</div>
-
-			<br>
 
 			<div style="display: flex; justify-content: space-between;">
 				<div style="flex: 1; margin-right: 10px; text-align: center;">
@@ -548,6 +560,11 @@
 			<br>
 
 			<h3>Changing <code>density</code></h3>
+
+			<p>
+				When maintaining the default parameters (<code>ks</code>, <code>damping</code>) and only modifying the <code>density</code>, we can see that at a lower density (<code>density = 1 g/cm^2</code>), the cloth mimics gift wrapping paper in the way it folds (and its appearance). This makes sense because paper generally has low density and doesn't "bunch up" together. A lower density equates to a lower mass, hence why there is less force applied and less self collisions. In contrast, at a higher density, there is greater mass so a larger force is applied to the cloth, causing more self-collisions. This is depicted when <code>density = 50 g/cm^2</code>, where the cloth has more folds/ripples (less able to hold its structure) and appears "heavier" like a blanket.
+			</p>
+
 			<div style="display: flex; justify-content: space-between;">
 				<div style="flex: 1; margin-right: 10px; text-align: center;">
 					<img src="images/p4-density=1-1.png" width="100%" />
@@ -562,8 +579,6 @@
 					</p>
 				 </div>
 			</div>
-
-			<br>
 
 			<div style="display: flex; justify-content: space-between;">
 				<div style="flex: 1; margin-right: 10px; text-align: center;">
