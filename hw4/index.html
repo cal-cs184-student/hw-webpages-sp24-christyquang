@@ -55,8 +55,8 @@
 		<h2 align="middle">Website URL: <a href="https://cal-cs184-student.github.io/hw-webpages-sp24-christyquang/hw4/index.html">Here</a></h2>
 
 		<div style="text-align: center;">
-			<img src="images/CBbunny m=5 o=1.png" width="50%" />
-			<p><code>us when we finish hw3 12 days late :D</code></p>
+			<img src="images/funny.png" width="50%" />
+			<p><code>lol i thought this pic was funny with the tiny cloth in the abyss</code></p>
 		</div>
 		<br>
 
@@ -293,6 +293,22 @@
 			<p>
 				When maintaining the default parameters (<code>ks</code>, <code>damping</code>) and only modifying the <code>density</code>, we can see that its effect on the cloth is almost inversely to <code>ks</code> — increasing the <code>density</code> has similar results to the cloth as decreasing the <code>ks</code>. At lower <code>density</code> values, the cloth has lower mass. Using Newton's Second Law (\(F = ma\)), this means that the forces accumulated at each point mass will be less, causing less forces to pull the cloth down and ultimately resulting in less creases/folds in the cloth (more flat). At higher <code>density</code> values, the forces accumulated at each point mass are greater which is why there are more creases/folds in the cloth. 
 			</p>
+
+			<div style="display: flex; justify-content: space-between;">
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/p2-density=1-wireframe.png" width="100%" />
+					<p>
+						<code>../scene/pinned2.json</code>, <code>density = 1 g/cm^2</code>, wireframe
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/p2-density=1-normal.png" width="100%" />
+					<p>
+						<code>../scene/pinned2.json</code>, <code>density = 1 g/cm^2</code>, normal
+					</p>
+				 </div>
+			</div>
+
 			<div style="display: flex; justify-content: space-between;">
 				<div style="flex: 1; margin-right: 10px; text-align: center;">
 					<img src="images/p2-density=50-wireframe.png" width="100%" />
@@ -319,21 +335,6 @@
 					<img src="images/p2-density=500-normal.png" width="100%" />
 					<p>
 						<code>../scene/pinned2.json</code>, <code>density = 500 g/cm^2</code>, normal
-					</p>
-				 </div>
-			</div>
-
-			<div style="display: flex; justify-content: space-between;">
-				<div style="flex: 1; margin-right: 10px; text-align: center;">
-					<img src="images/p2-density=50000-wireframe.png" width="100%" />
-					<p>
-						<code>../scene/pinned2.json</code>, <code>density = 50000 g/cm^2</code>, wireframe
-					</p>
-				</div>
-				<div style="flex: 1; margin-left: 10px; text-align: center;">
-					<img src="images/p2-density=50000-normal.png" width="100%" />
-					<p>
-						<code>../scene/pinned2.json</code>, <code>ks = 50000 g/cm^2</code>, normal
 					</p>
 				 </div>
 			</div>
@@ -413,12 +414,76 @@
 				on the sphere using the default <code>ks = 5000</code> as well as with <code>ks = 500</code> and <code>ks = 50000</code>. 
 			</b></blockquote>
 
+			<h3><code>ks = 5000 N/m (default)</code></h3>
+			<div style="display: flex; justify-content: space-between;">
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/p3-ks=5000-wireframe.png" width="100%" />
+					<p>
+						<code>../scene/selfCollision.json, ks = 5000 N/m</code>, wireframe
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/p3-ks=5000-normal.png" width="100%" />
+					<p>
+						<code>../scene/selfCollision.json, ks = 5000 N/m</code>, normal
+					</p>
+				 </div>
+			</div>
+
+			<h3><code>ks = 50 N/m</code></h3>
+			<div style="display: flex; justify-content: space-between;">
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/p3-ks=50-wireframe.png" width="100%" />
+					<p>
+						<code>../scene/selfCollision.json, ks = 50 N/m</code>, wireframe
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/p3-ks=50-normal.png" width="100%" />
+					<p>
+						<code>../scene/selfCollision.json, ks = 50 N/m</code>, normal
+					</p>
+				 </div>
+			</div>
+
+			<h3><code>ks = 500 N/m</code></h3>
+			<div style="display: flex; justify-content: space-between;">
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/p3-ks=500-wireframe.png" width="100%" />
+					<p>
+						<code>../scene/selfCollision.json, ks = 500 N/m</code>, wireframe
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/p3-ks=500-normal.png" width="100%" />
+					<p>
+						<code>../scene/selfCollision.json, ks = 500 N/m</code>, normal
+					</p>
+				 </div>
+			</div>
+
+			<h3><code>ks = 50,000 N/m</code></h3>
+			<div style="display: flex; justify-content: space-between;">
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/p3-ks=5000-wireframe.png" width="100%" />
+					<p>
+						<code>../scene/selfCollision.json, ks = 50000 N/m</code>, wireframe
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/p3-ks=50000-normal.png" width="100%" />
+					<p>
+						<code>../scene/selfCollision.json, ks = 50000 N/m</code>, normal
+					</p>
+				 </div>
+			</div>
+
 			<blockquote><b>
 				<small>Describe the differences in the results.</small>
 			</b></blockquote>
 
 			<p>
-				We can see through the images below that when we increase <code>ks</code>, this results in increasing the stiffness of the spring. The cloth becomes more rigid and there is more structure to the folds. The material also goes from looking like velvet/silk to a stiffer material. This makes sense because a stiff spring will resist the deformation from gravity. In contrast, at lower <code>ks</code> values, the cloth is more flexible because of a weaker spring, hence why it appears more "loose" and drapes easier.
+				We can see through the images below that when we increase <code>ks</code>, this results in increasing the stiffness of the spring. The cloth becomes more rigid and there is more structure to the folds. The material also goes from looking like velvet/silk to a stiffer material. This makes sense because a stiff spring will resist the deformation from gravity. In contrast, at lower <code>ks</code> values, the cloth is more flexible because of a weaker spring, hence why it appears more "loose" and drapes easier. This is especially prevalent when <code>ks = 50 N/m</code>, where the cloth resembles a thin hankerchief/napkin.
 			</p>
 
 			<hr>
@@ -434,6 +499,26 @@
 				If you haven't by now, feel free to express your colorful creativity with the cloth! 
 				(You will need to complete the shaders portion first to show custom colors.)
 			</b></blockquote>
+
+			<div style="display: flex; justify-content: space-between;">
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/p3-plane-wire.png" width="100%" />
+					<p>
+						<code>../scene/plane.json</code>, wireframe
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/p3-plane-normal.png" width="100%" />
+					<p>
+						<code>../scene/plane.json</code>, normal
+					</p>
+				 </div>
+			</div>
+
+			<div style="text-align: center;">
+				<img src="images/p3-plane-custom.png" width="50%" />
+				<p><code>../scene/plane.json</code>, custom texture of poop</p>
+			</div>
 
 			<br>
 
@@ -620,10 +705,24 @@
 				Explain in your own words what is a shader program and how vertex and fragment shaders work together to create lighting and material effects.
 			</b></blockquote>
 
+			<p>
+				For this part, we are creating various shaders using the language GLSL. A shader program is used to make rendering more efficient/faster by transferring rendering workload from the CPU to the GPU (processes the vertex and fragments in the rasterization pipeline). Two shader types — vertex and fragment — work together to create the lighting and material effects that we want. The vertex shader deals with the position and transforms of the vertices themselves (from the 3D positions to 2D screen space based on the camera position and perspective). After processing the vertex positions, it will save the final vertex position. The output of the vertex shader is inputted into the fragment shader, which essentially just calculates the final color to be outputted after factoring in lighting, textures, and material properties. It does this by reading the geometric attributes passed in, and doing the appropiate calculations to get the exact color to be outputted by that fragment. The combination of these two shaders allows for the creation of realistic images in a computationally efficient approach.
+			</p>
+
 			<hr>
 			<h3 align="middle">Task 1: Diffuse Shading</h3>
 			<hr>
 
+			<p>
+				In this task, we implemented diffuse shading, which is related to Lambert's Law. To implement this, we used the equation given in lecture: we first found the dot product between the normal vector and the direction vector of the light. We ensured that it was a positive number, then multiplied it with the light intensity to get the final out color that we need.
+			</p>
+
+			<div style="text-align: center;">
+				<img src="images/p5-diffuse.png" width="50%" />
+				<p><code>../scene/sphere.json</code>, diffuse shading</p>
+			</div>
+
+			<hr>
 			<h3 align="middle">Task 2: Blinn-Phong Shading</h3>
 			<hr>
 			<blockquote><b>
@@ -631,39 +730,82 @@
 				Show a screenshot of your Blinn-Phong shader outputting only the ambient component, a screen shot only outputting the diffuse component, a screen shot only outputting the specular component, and one using the entire Blinn-Phong model.
 			</b></blockquote>
 
-			<div align="middle">
-				<table style="width:100%">
-				  <tbody><tr align="center">
-					<td>
-						<img src="images/t5-blinn-phong-ambient.png" align="middle" width="400px">
-						<figcaption>Ambient component only</figcaption>
-						
-					</td>
-					<td>
-						<img src="images/t5-blinn-phong-diffuse.png" align="middle" width="400px">
-						<figcaption>Diffuse component only</figcaption>
-					</td>
-				  </tr>
-				  <tr align="center">
-					<td>
-						<img src="images/t5-blinn-phong-specular.png" align="middle" width="400px">
-						<figcaption>Specular component only</figcaption>
-					</td>
-					<td>
-						<img src="images/t5-blinn-phong-all.png" align="middle" width="400px">
-						<figcaption>Complete Blinn-Phong model</figcaption>
-					</td>
-				  </tr>
-				</tbody></table>
+			<p>
+				The Blinn-Phong shading model essentially takes in three different aspects — ambient, diffuse, and specular — and adds them together to create the final shader. The ambient shading accounts for the constant color without any other factors involved. The diffuse shading accounts for the light and how it interacts with the curve of the object, but it is independent of the view direction. The specular shading accounts for view direction, adding in the intensity of the light based on that. Adding together these three components creates a very realistic shader, accounting for the different parts of the environment.
+			</p>
+
+			<p>
+				In this task, we implemented these three parts to create the final Blinn-Phong shader. For the diffuse shader, we took the code from Task 1 of this part. For the ambient portion, we simply added the input color itself. For the specular portion, we wanted an effect similar to a mirror. Instead of using the regular normal vector, we used the bisector vector of the light and view vectors. This way, it would depend on the view direction as we want. Finally, we just added all three of these parts to get the final out color.
+			</p>
+
+			<ul>
+				<li>
+					Ambinent: Flat lighting applied to the whole scene uniformly (constant)
+				</li>
+				<li>
+					Diffuse: Light in now factored in based on the distance to an object + angle the light falls upon --> matte appearance
+				</li>
+				<li>
+					Specular: Reflection of light on "glossy" surfaces and is dependent on the view
+				</li>
+			</ul>
+
+			<div style="display: flex; justify-content: space-between;">
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/p5-ambient-shading.png" width="100%" />
+					<p>
+						<code>../scene/sphere.json</code>, ambient component only
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/p5-diffuse-shading.png" width="100%" />
+					<p>
+						<code>../scene/sphere.json</code>, diffuse component only
+					</p>
+				 </div>
+			</div>
+
+			<div style="display: flex; justify-content: space-between;">
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/p5-specular-shading.png" width="100%" />
+					<p>
+						<code>../scene/sphere.json</code>, specular component only
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/p5-phong-shading.png" width="100%" />
+					<p>
+						<code>../scene/sphere.json</code>, complete Blinn-Phong model
+					</p>
+				 </div>
 			</div>
 
 			<hr>
 			<h3 align="middle">Task 3: Texture Mapping</h3>
 			<hr>
 
+			<p>
+				In this task, we wanted to create a shader that maps a given texture to the object. We implemented this taking advantage of the <code>texture()</code> function in GLSL that allows us to sample from the given texture at a certain location. Using this, we can get our final out color needed.
+			</p>
+
 			<blockquote><b>
 				Show a screenshot of your texture mapping shader using your own custom texture by modifying the textures in <code>/textures/</code>.
 			</b></blockquote>
+
+			<div style="display: flex; justify-content: space-between;">
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/p5-campanile-texture.png" width="100%" />
+					<p>
+						<code>../scene/sphere.json</code>, default Campanile texture shader
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/p5-custom-texture.png" width="100%" />
+					<p>
+						<code>../scene/sphere.json</code>, custom texture shader
+					</p>
+				 </div>
+			</div>
 
 			<hr>
 			<h3 align="middle">Task 4: Displacement and Bump Mapping</h3>
@@ -679,56 +821,266 @@
 				Compare how your the two shaders react to the sphere by changing the sphere mesh's coarseness by using <code>-o 16 -a 16</code> and then <code>-o 128 -a 128</code>.
 			</b></blockquote>
 
-			<div align="middle">
-				<table style="width:100%">
-				  <tbody><tr align="center">
-					<td>
-					  <img src="images/t5-bump-mapping-cloth.png" align="middle" width="400vw">
-					  <figcaption>Bump Mapping on the Cloth</figcaption>
-					</td>
-					<td>
-					  <img src="images/t5-bump-mapping-sphere.png" align="middle" width="400vw">
-					  <figcaption>Bump Mapping on the Sphere</figcaption>
-					</td>
-					<td>
-				  </td></tr>
-				  <tr align="center">
-					<td>
-					  <img src="images/t5-displacement-mapping-sphere.png" align="middle" width="400vw">
-					  <figcaption>Displacement Mapping on the Sphere</figcaption>
-					</td>
-					<td>
-					  <img src="images/t5-displacement-mapping-sphere-2.png" align="middle" width="400vw">
-					  <figcaption>Displacement Mapping on the Sphere (coarser mesh)</figcaption>
-					</td>
-					<td>
-				  </td></tr>
-				</tbody></table>
+			<p>
+				In this task, we implemented shaders that account for bumps and displacement. For the bump mapping, we used a height map to calculate a new normal vector at a certain point, and used that vector for the Blinn-Phong shading instead of the original normal. To calculate this new normal, we look at how the height changes using the height map. We used the <code>r</code> component of the color to figure this out, and used the vector position as well as height and normal scalars to find the final normal vector. 
+			</p>
+
+			<p>
+				Below are screenshots of running <code>./clothsim -f ../scene/sphere.json</code> with bump mapping, setting the normal to 5 and height to 1, using <code>texture3.png</code>.
+			</p>
+
+			<div style="display: flex; justify-content: space-between;">
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/p5-bump-sphere.png" width="100%" />
+					<p>
+						<code>../scene/sphere.json</code>, Bump Mapping on the Sphere
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/p5-bump-cloth.png" width="100%" />
+					<p>
+						<code>../scene/sphere.json</code>, Bump Mapping on the Cloth
+					</p>
+				 </div>
 			</div>
+
+			<div style="display: flex; justify-content: space-between;">
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/p5-bump-cloth-sphere.png" width="100%" />
+					<p>
+						<code>../scene/sphere.json</code>, Bump Mapping on the Sphere and Cloth
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/p5-bump-normal=5-height=1.png" width="100%" />
+					<p>
+						<code>../scene/sphere.json</code>, Bump Mapping
+					</p>
+				 </div>
+			</div>
+
+			<p>
+				On the other hand, for displacement mapping, we are also adjusting the actual position of the vertices to match the map, creating the displacement that we see on the object. All together, we have the bump created by the new normals that we calculated, as well as varying vertex positions to account for corresponding displacements. We did this by updating <code>Displacement.vert</code> and changed <code>gl_position</code> since it represents the screen space position.
+			</p>
+
+			<p>
+				Below are screenshots of running <code>./clothsim -f ../scene/sphere.json</code> with displacement mapping, setting the normal to 100 and height to 0.05, using <code>texture3.png</code>.
+			</p>
+
+			<div style="display: flex; justify-content: space-between;">
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/p5-displacement-sphere.png" width="100%" />
+					<p>
+						<code>../scene/sphere.json</code>, Displacement Mapping on the Sphere
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/p5-displacement-cloth.png" width="100%" />
+					<p>
+						<code>../scene/sphere.json</code>, Displacement Mapping on the Cloth
+					</p>
+				 </div>
+			</div>
+
+			<div style="display: flex; justify-content: space-between;">
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/p5-displacement-cloth-sphere.png" width="100%" />
+					<p>
+						<code>../scene/sphere.json</code>, Displacement Mapping on the Sphere and Cloth
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/p5-displacement-normal=100-height=0.05.png" width="100%" />
+					<p>
+						<code>../scene/sphere.json</code>, Displacement Mapping
+					</p>
+				 </div>
+			</div>
+
+			<h3>Bump vs Displacement Mapping</h3>
+			<div style="display: flex; justify-content: space-between;">
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/p5-bump-sphere.png" width="100%" />
+					<p>
+						<code>../scene/sphere.json</code>, Bump Mapping on the Sphere
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/p5-displacement-sphere.png" width="100%" />
+					<p>
+						<code>../scene/sphere.json</code>, Displacement Mapping on the Sphere
+					</p>
+				 </div>
+			</div>
+
+			<div style="display: flex; justify-content: space-between;">
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/p5-bump-normal=5-height=1.png" width="100%" />
+					<p>
+						<code>../scene/sphere.json</code>, Bump Mapping on the Sphere and Cloth
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/p5-displacement-normal=100-height=0.05.png" width="100%" />
+					<p>
+						<code>../scene/sphere.json</code>, Displacement Mapping on the Sphere and Cloth
+					</p>
+				 </div>
+			</div>
+
+			<p>
+				We can see that bump mapping still maintains the smoothness of the sphere since only the fragments are modified, creating the visual effect of bumps and indents. On the other hand, displacement mapping changes the location of each vertex, causing it to be more deformed and "spiky".
+			</p>
+
+			<h3>Changing Coarseness</h3>
+			<div style="display: flex; justify-content: space-between;">
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/p5-bump-o=16-a=16.png" width="100%" />
+					<p>
+						<code>../scene/sphere.json</code>, Bump Mapping <code>-o 16 -a 16</code>
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/p5-displacement-o=128-a=128.png" width="100%" />
+					<p>
+						<code>../scene/sphere.json</code>, Displacement Mapping <code>-o 16 -a 16</code>
+					</p>
+				 </div>
+			</div>
+
+			<div style="display: flex; justify-content: space-between;">
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/p5-bump-o=128-a=128.png" width="100%" />
+					<p>
+						<code>../scene/sphere.json</code>, Bump Mapping <code>-o 128 -a 128</code>
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/p5-displacement-o=128-a=128.png" width="100%" />
+					<p>
+						<code>../scene/sphere.json</code>, Displacement Mapping <code>-o 128 -a 128</code>
+					</p>
+				 </div>
+			</div>
+
+			<p>
+				Above are screenshots of running <code>./clothsim -f ../scene/sphere.json</code> with bump and displacement mapping, setting the normal to 100 and height to 0.05, using <code>texture3.png</code>. The coarseness is altered by <code>-o 16 -a 16</code> and <code>-o 128 -a 128</code>.
+			</p>
+
+			<p>
+				When changing the coarseness of the sphere, we can immediately see that displacement mapping impacts coarseness more than bump mapping does. With lower coarseness, there's less sampling points to change the vertices of, hence why there are jumps and the sphere appears more "spikey". At a higher resolution, the coarseness is higher and the surface texture of the sphere is more realistic. The spikes are also less pronounced because more vertices' positions are displaced, causing the overall sphere to apear more "round".
+			</p>
+
+			<p>
+				With bump mapping, there is little difference in the sphere's shape because the positions of the vertices don't change.
+			</p>
 
 			<hr>
 			<h3 align="middle">Task 5: Environment-mapped Reflections</h3>
 			<hr>
 
+			<p>
+				In this task, we want to create a shader that creates a direct reflection of the environment, like a mirror. We do this by finding the outgoing eye-ray, \(w_o\) by subtracting the camera's position <code>u_cam_pos</code> from the fragment's position (<code>v_position</code>). Then, we calculate the incoming eye-ray, \(w_i\) with the formula \(w_o - 2(w_o * n) * n\). Afterwards, we sample the texture for the incoming direction \(w_i\) calculated.
+			</p>
+
 			<blockquote><b>
 				Show a screenshot of your mirror shader on the cloth and on the sphere.
 			</b></blockquote>
 
-			<div align="middle">
-				<table style="width:100%">
-				  <tbody><tr align="center">
-					<td>
-					  <img src="images/t5-mirror-shader-cloth.png" align="middle" width="400vw">
-					  <figcaption>Mirror Shader on the Cloth</figcaption>
-					</td>
-					<td>
-					  <img src="images/t5-mirror-shader-sphere.png" align="middle" width="400vw">
-					  <figcaption>Mirror Shader on the Sphere</figcaption>
-					</td>
-					<td>
-				  </td></tr>
-				</tbody></table>
+			<div style="display: flex; justify-content: space-between;">
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/p5-mirror-sphere.png" width="100%" />
+					<p>
+						<code>../scene/sphere.json</code>, mirror shader on the sphere
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/p5-mirror-cloth.png" width="100%" />
+					<p>
+						<code>../scene/sphere.json</code>, mirror shader on the cloth
+					</p>
+				 </div>
 			</div>
+
+			<div style="display: flex; justify-content: space-between;">
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/p5-mirror-cloth-sphere.png" width="100%" />
+					<p>
+						<code>../scene/sphere.json</code>, mirror shader on the sphere and cloth
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/p5-mirror.png" width="100%" />
+					<p>
+						<code>../scene/sphere.json</code>, mirror shader
+					</p>
+				 </div>
+			</div>
+
+			<hr>
+			<a>
+				<h2 align="middle">Part 6: Extra Credit</h2>
+			</a>
+			<hr>
+
+			<p>
+				In preparation for our final project, we wanted to get experience with building our custom shader. We intended to simulate the appearance of water with random darker dots on the surface (i.e static on an old TV screen) and the final output is similar to that.
+			</p>
+
+			<p>
+				To generate the random dots, we initially searched for a random function in GLSL but couldn't find one. Therefore, we created our own random number generator based on this <a href="http://www.science-and-fiction.org/rendering/noise.html" target="_blank">source</a> and adjusted the numbers accordingly. The function returns a random number between 0 and 1.
+			</p>
+			
+
+			<p>
+				If the random number is < 0.5, we set all the <code>k_coefficients</code> to <code>0.4</code>. Otherwise, we set all the <code>k_coefficients</code> to <code>0.9</code>. The shader calculates the dots by multiplying the normal vector <code>v_normal.xyz</code> with the coefficients. This adjusts the darkness of the dots based on the surface normal.
+			</p>
+
+			<p>
+				To create the blue color of water, we experiment with different RGB values and added that to our vector of dots. We attempted to create the transparent/translucence appearance of water via <code>vec4 transparent_water = vec4(water_color, 0.5)</code> which semi-worked. This was done by combining the water color with an alpha value, resulting in partial transparency.
+			</p>
+
+			<div style="display: flex; justify-content: space-between;">
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/p5-custom-shader-sphere.png" width="100%" />
+					<p>
+						<code>../scene/sphere.json</code>, sphere view with custom shader
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/p5-custom-shader-cloth.png" width="100%" />
+					<p>
+						<code>../scene/sphere.json</code>, cloth view with custom shader
+					</p>
+				 </div>
+			</div>
+
+			<div style="display: flex; justify-content: space-between;">
+				<div style="flex: 1; margin-right: 10px; text-align: center;">
+					<img src="images/p5-custom-shader-sphere-cloth.png" width="100%" />
+					<p>
+						<code>../scene/sphere.json</code>, sphere and cloth view with custom shader
+					</p>
+				</div>
+				<div style="flex: 1; margin-left: 10px; text-align: center;">
+					<img src="images/p5-custom-shader.png" width="100%" />
+					<p>
+						<code>../scene/sphere.json</code>, view with custom shader
+					</p>
+				 </div>
+			</div>
+
+			<div style="text-align: center;">
+				<img src="images/p5-custom-shader-under.png" width="50%" />
+				<p><code>../scene/sphere.json</code>, underneath the cloth with custom shader, showcasing the random dots</p>
+			</div>
+
+			<p>
+				The shader is "holographic" on the underside of the cloth while the sphere is a combination of light blue, dark blue, pink, and white. The top of the cloth is more translucent, where the screenshot of the cloth on the sphere gives off the illusion of the ball not being present. Overall, the shader mimics a glossy and thin sheet of holographic paper on the underside, while resembling a shiny jellyfish body from the side view to me.
+			</p>
+
+			<hr>
+			
 		</div>
 	</body>
 </html>
